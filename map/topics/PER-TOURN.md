@@ -2,6 +2,8 @@
 
 **Status:** **upcoming** (lecture Wed 7 Oct; no exercise set yet) · **Exam weight:** in **1/4** finals/resits (F25 Q3 = 10 pts = 16.7% of that exam) · 4 F/R sub-Qs · **3.3% of a typical exam** (split) · **Priority B** (a one-off big block, but it is lectured this year, so expect it as a candidate for the "new block" on 23 Oct)
 
+> **Study first:** [Tournaments, in-depth lecture](<../../Personnel Economics (Dur)/Lectures/Tournaments - in-depth lecture/index.html>): the full Kuhn ch. 20-23 derivations with live diagrams, and F25 Q3 solved point by point (open `index.html` in a browser; [text version](<../../Personnel Economics (Dur)/Lectures/Tournaments - in-depth lecture/lecture-notes.md>)).
+
 ## How the exam asks it
 
 Template **T15**: the linear-contract backbone, with the bonus replaced by a prize spread.

@@ -1,5 +1,7 @@
 # Interactive Personnel Economics lectures
 
+> **Tournaments:** a rewritten, in-depth version of the competition lecture (step-by-step derivations, live diagrams, F25 Q3 solved point by point, practice problems) is in [`../Tournaments - in-depth lecture/`](<../Tournaments - in-depth lecture/index.html>). It opens directly in a browser, with no server needed.
+
 Course topics: **PER-BIAS** (Topic7, Kuhn16) and **PER-TOURN** (Topic8, Kuhn20–23).
 
 These are browser slides, rather than PDFs or videos. GitHub displays their source; to use the interactive graphs, clone/download the repository and run them locally with Node.js. No dependency installation is needed.
