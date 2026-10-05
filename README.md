@@ -4,6 +4,7 @@ Course material, past exams and an **exam map** for Applied Microeconomics at Er
 
 ## Start here
 - **[map/EXAM-MAP.md](map/EXAM-MAP.md)**: what the exam asks, where the points are, gaps in the tutorials, and which book sections to read
+- **[map/PRIORITIES.md](map/PRIORITIES.md)**: ranked work order. What's worth the most, what's hardest, and the best return per study hour
 - **[GUIDE.md](GUIDE.md)**: how to use this repo with friends (separate progress files, shared struggles)
 - **[AGENTS.md](AGENTS.md)**: instructions for AI agents working in this repo
 

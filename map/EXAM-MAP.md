@@ -47,6 +47,8 @@ All 15 rules: [exams-tagged.md §4](_work/exams-tagged.md).
 
 ## 2. Priority list - where the points are
 
+> **Ranked work order, hardest topics and the weight x difficulty matrix: [PRIORITIES.md](PRIORITIES.md).**
+
 Weight = average % of a final/resit. Priority A = core (shows up most exams), B = sometimes or one big block, C = never examined (skim).
 
 ### Public Economics ([full gap table](GAPS-PUBLIC.md))
