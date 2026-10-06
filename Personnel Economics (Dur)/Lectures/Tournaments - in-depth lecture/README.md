@@ -3,11 +3,12 @@
 A 54-slide HyperFrames slideshow: step-by-step derivations, live diagrams, a 3D win-probability surface, and the Oct 2025 exam question solved point by point.
 
 ## Open it
-- **Windows:** double-click `Start lecture.cmd` (needs Node.js). It starts a local server and opens the deck in your browser.
+- **Easiest, on any PC or laptop:** double-click **`Tournaments lecture - OPEN THIS.html`**. It is one self-contained file (fonts, maths, 3D and scripts all inside), opens in Chrome, Edge or any browser, and needs no server, no Node and no internet. Navigate with → / Space, ← and F for fullscreen, or with the capsule in the bottom-right.
+- **With presenter mode (notes + audience window):** on Windows double-click `Start lecture.cmd` (needs Node.js). It starts a local server and opens the deck in your browser.
 - **Any OS:** `node serve.mjs`, then open http://127.0.0.1:3040
 - Or with the HyperFrames CLI: `npx hyperframes present composition`
 
-The player needs `http://`, so opening `index.html` directly from the file system does not work.
+The presenter version needs `http://`, so `index.html` itself does not open from the file system. Use the OPEN THIS file for that.
 
 **Controls:** → / Space reveals the next step · ← goes back · **P** opens presenter mode (notes + audience window) · fullscreen button in the bottom-right capsule. Drag the sliders, and drag the 3D surface to rotate it.
 

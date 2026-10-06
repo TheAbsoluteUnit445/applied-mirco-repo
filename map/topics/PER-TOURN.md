@@ -2,7 +2,7 @@
 
 **Status:** **upcoming** (lecture Wed 7 Oct; no exercise set yet) · **Exam weight:** in **1/4** finals/resits (F25 Q3 = 10 pts = 16.7% of that exam) · 4 F/R sub-Qs · **3.3% of a typical exam** (split) · **Priority B** (a one-off big block, but it is lectured this year, so expect it as a candidate for the "new block" on 23 Oct)
 
-> **Study first:** [Tournaments, in-depth lecture](<../../Personnel Economics (Dur)/Lectures/Tournaments - in-depth lecture/README.md>): a 54-slide HyperFrames deck with the full Kuhn ch. 20-23 derivations, live diagrams and a 3D surface, plus F25 Q3 solved point by point (double-click `Start lecture.cmd`; no-server [reading version](<../../Personnel Economics (Dur)/Lectures/Tournaments - in-depth lecture/reading-version.html>), [text version](<../../Personnel Economics (Dur)/Lectures/Tournaments - in-depth lecture/lecture-notes.md>)).
+> **Study first:** [Tournaments, in-depth lecture](<../../Personnel Economics (Dur)/Lectures/Tournaments - in-depth lecture/README.md>): a 54-slide HyperFrames deck with the full Kuhn ch. 20-23 derivations, live diagrams and a 3D surface, plus F25 Q3 solved point by point (double-click `Tournaments lecture - OPEN THIS.html`; no-server [reading version](<../../Personnel Economics (Dur)/Lectures/Tournaments - in-depth lecture/reading-version.html>), [text version](<../../Personnel Economics (Dur)/Lectures/Tournaments - in-depth lecture/lecture-notes.md>)).
 
 ## How the exam asks it
 

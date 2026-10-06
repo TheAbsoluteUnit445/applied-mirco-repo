@@ -122,7 +122,9 @@ const RUNTIME = `
     else if(n){ tl.seek(+n[1]); update(+n[1]); }
   }
   window.addEventListener('hashchange',fromHash); fromHash();
+  window.__deck={scenes:SCENES,frags:FRAGS,seek:function(t){tl.seek(t);update(t);}};
 })();`;
+const STANDALONE = fs.readFileSync(path.join(HERE, 'standalone.js'), 'utf8');
 
 const comp = `<!doctype html>
 <html lang="en">
@@ -146,6 +148,7 @@ ${islandJson}
 ${sceneHtml}
 <script>${RUNTIME}</script>
 <script>${WIDGETS}</script>
+<script>${STANDALONE}</script>
 </body>
 </html>
 `;
@@ -178,3 +181,18 @@ fs.writeFileSync(path.join(DECK, 'index.html'), wrapper);
 
 console.log(JSON.stringify({ slides: N, fragments: fragTable.length, seconds: TOTAL, mathErrors: mathErrors.length }));
 if (mathErrors.length) { console.error(mathErrors.join('\n')); process.exitCode = 1; }
+
+// ---------- single self-contained file (opens with a double-click, no server) ----------
+{
+  const b64 = (p) => fs.readFileSync(p).toString('base64');
+  let html = fs.readFileSync(path.join(COMP, 'index.html'), 'utf8');
+  let katexCss = fs.readFileSync(path.join(COMP, 'vendor/katex/katex.min.css'), 'utf8')
+    .replace(/url\(fonts\/([^)]+\.woff2)\)/g, (_, f) => `url(data:font/woff2;base64,${b64(path.join(COMP, 'vendor/katex/fonts', f))})`);
+  html = html.replace('<link rel="stylesheet" href="vendor/katex/katex.min.css">', () => `<style>${katexCss}</style>`);
+  html = html.replace(/url\("fonts\/(inter-[^"]+\.woff2)"\)/g, (_, f) => `url("data:font/woff2;base64,${b64(path.join(COMP, 'fonts', f))}")`);
+  html = html.replace(/<script src="vendor\/([^"]+)"><\/script>/g, (_, f) => `<script>${fs.readFileSync(path.join(COMP, 'vendor', f), 'utf8').replace(/<\/script/gi, '<\/script')}</script>`);
+  html = html.replace('<title>Tournaments, In Depth</title>', '<title>Tournaments, In Depth</title>\n<meta name="viewport" content="width=device-width, initial-scale=1">');
+  const out = path.join(DECK, 'Tournaments lecture - OPEN THIS.html');
+  fs.writeFileSync(out, html);
+  console.log('single file:', path.basename(out), (fs.statSync(out).size / 1e6).toFixed(2) + ' MB');
+}
