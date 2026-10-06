@@ -1,1146 +1,454 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tournaments, In Depth</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
-<style>
-:root{
-  --bg:#f7f5f0; --panel:#ffffff; --ink:#1d2a30; --muted:#5b6b72; --line:#d9dcd6;
-  --accent:#0f6b66; --accent-soft:#e3f0ec; --gold:#b9771e; --gold-soft:#f6ead6;
-  --red:#b4413a; --blue:#2f5f9e; --blue-soft:#e4ecf7; --grid:#eceee9;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#131a1d; --panel:#1b2428; --ink:#e7ecea; --muted:#9aaab0; --line:#33434a;
-    --accent:#4fbfb3; --accent-soft:#1f3634; --gold:#e0a64f; --gold-soft:#3a2e1b;
-    --red:#e2756c; --blue:#7fa8e0; --blue-soft:#1f2c3d; --grid:#253136;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#131a1d; --panel:#1b2428; --ink:#e7ecea; --muted:#9aaab0; --line:#33434a;
-  --accent:#4fbfb3; --accent-soft:#1f3634; --gold:#e0a64f; --gold-soft:#3a2e1b;
-  --red:#e2756c; --blue:#7fa8e0; --blue-soft:#1f2c3d; --grid:#253136;
-}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.55 "Inter",system-ui,-apple-system,"Segoe UI",sans-serif}
-.deck{max-width:1180px;margin:0 auto;padding:16px 16px 96px}
-.slide{display:none;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:36px 44px;min-height:calc(100vh - 140px)}
-.slide.active{display:block}
-body.article .slide{display:block;min-height:0;margin-bottom:22px}
-.kicker{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
-h1{font-size:34px;line-height:1.2;margin:0 0 18px}
-h2{font-size:22px;margin:22px 0 8px}
-p{margin:0 0 12px}
-.lead{font-size:20px;color:var(--muted);max-width:820px}
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
-.cols.wide-right{grid-template-columns:5fr 6fr}
-.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.box{border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:12px 0;background:var(--panel)}
-.box.key{background:var(--accent-soft);border-color:transparent}
-.box.warn{background:var(--gold-soft);border-color:transparent}
-.box.exam{background:var(--blue-soft);border-color:transparent}
-.box h3{margin:0 0 6px;font-size:15px;text-transform:uppercase;letter-spacing:.06em}
-.result{border-left:5px solid var(--accent);padding:10px 16px;margin:14px 0;background:var(--accent-soft);border-radius:0 10px 10px 0}
-.result b:first-child{color:var(--accent)}
-.derive{counter-reset:st;margin:8px 0;padding:0;list-style:none}
-.derive li{counter-increment:st;position:relative;padding:8px 10px 8px 46px;border-bottom:1px dashed var(--line)}
-.derive li::before{content:counter(st);position:absolute;left:8px;top:8px;width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--panel);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
-.derive .why{display:block;color:var(--muted);font-size:15px}
-.pts{float:right;font-size:13px;font-weight:700;color:var(--blue);background:var(--blue-soft);border-radius:20px;padding:2px 10px;margin-left:8px}
-table{border-collapse:collapse;width:100%;margin:10px 0;font-size:16px}
-th,td{border-bottom:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
-th{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
-.fig{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px}
-.fig svg{width:100%;height:auto;display:block}
-.fig .cap{font-size:14px;color:var(--muted);margin-top:6px}
-.ctrl{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:center;font-size:15px;margin-top:8px}
-.ctrl input{width:100%;accent-color:var(--accent)}
-.ctrl output{font-variant-numeric:tabular-nums;font-weight:700;min-width:54px;text-align:right}
-.readout{font-size:15px;background:var(--accent-soft);border-radius:8px;padding:8px 12px;margin-top:8px;font-variant-numeric:tabular-nums}
-svg text{fill:var(--muted);font-size:13px;font-family:inherit}
-svg .ax{stroke:var(--muted);stroke-width:1.2}
-svg .gr{stroke:var(--grid);stroke-width:1}
-svg .c1{stroke:var(--accent);stroke-width:3;fill:none}
-svg .c2{stroke:var(--gold);stroke-width:3;fill:none}
-svg .c3{stroke:var(--blue);stroke-width:3;fill:none}
-svg .c4{stroke:var(--red);stroke-width:2.5;fill:none}
-svg .dash{stroke-dasharray:6 5}
-svg .fillA{fill:var(--accent);opacity:.22}
-svg .fillB{fill:var(--gold);opacity:.28}
-svg .dot{fill:var(--ink)}
-svg .lbl{fill:var(--ink);font-weight:600}
-svg .node{fill:var(--panel);stroke:var(--line);stroke-width:1.5}
-svg .nodeA{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
-svg .nodeB{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
-svg .arrow{stroke:var(--muted);stroke-width:1.6;fill:none;marker-end:url(#arr)}
-.step{transition:opacity .25s}
-body:not(.article) .slide .step.hidden{opacity:0;pointer-events:none}
-details{border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin:10px 0}
-details summary{cursor:pointer;font-weight:600}
-details[open]{background:var(--accent-soft);border-color:transparent}
-.tag{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:12px;background:var(--gold-soft);color:var(--gold);margin-right:6px;vertical-align:2px}
-.tag.book{background:var(--accent-soft);color:var(--accent)}
-.tag.exam{background:var(--blue-soft);color:var(--blue)}
-.tag.ill{background:var(--grid);color:var(--muted)}
-.divider{flex-direction:column;justify-content:center}
-.slide.divider.active,body.article .slide.divider{display:flex}
-.divider h1{font-size:44px}
-.bar{position:fixed;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--line);display:flex;gap:8px;align-items:center;padding:10px 16px;z-index:5}
-.bar button{font:inherit;font-size:15px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}
-.bar button.primary{background:var(--accent);border-color:var(--accent);color:var(--panel)}
-.bar .pos{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
-.bar .grow{flex:1}
-.bar select{font:inherit;font-size:14px;max-width:280px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:5px}
-.progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:6;transition:width .2s}
-body.article .progress{display:none}
-.small{font-size:15px;color:var(--muted)}
-.katex{font-size:1.05em}
-.big .katex-display{font-size:1.25em}
-@media (max-width:860px){
-  .cols,.cols.wide-right,.cols3{grid-template-columns:1fr}
-  .slide{padding:22px 18px;min-height:0}
-  h1{font-size:26px}
-  .bar select{display:none}
-}
-@media print{.bar,.progress{display:none}.slide{display:block!important;break-after:page;border:none}.step.hidden{opacity:1!important}}
-</style>
+<script src="vendor/hyperframes-player.global.js"></script>
+<script src="vendor/hyperframes-slideshow.global.js"></script>
+<style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden;background:#eae6dc}</style>
 </head>
 <body>
-<div class="progress" id="progress"></div>
-<svg width="0" height="0" style="position:absolute"><defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor" style="fill:var(--muted)"/></marker></defs></svg>
-<main class="deck" id="deck">
-
-<!-- ============ 1. TITLE ============ -->
-<section class="slide" data-title="Title">
-  <div class="kicker">Personnel Economics · Lecture topic 8 · Kuhn ch. 20–23</div>
-  <h1 style="font-size:44px">Tournaments: competing for a promotion</h1>
-  <p class="lead">How a firm can make people work hard by paying them for their <em>rank</em> rather than for their output. We'll derive every result, see it in a diagram, then solve the real exam question point by point.</p>
-  <div class="cols" style="margin-top:24px">
-    <div>
-      <h2>Roadmap</h2>
-      <table>
-        <tr><td><b>Part 1</b></td><td>The basic model: who wins, how hard do people work, what is efficient, how to design the prize <span class="small">(Kuhn 20.1–20.6)</span></td></tr>
-        <tr><td><b>Part 2</b></td><td>Why firms like rank-based pay: common shocks, many players, sequential contests <span class="small">(20.7–20.9)</span></td></tr>
-        <tr><td><b>Part 3</b></td><td>What goes wrong: sabotage, collusion, gambling <span class="small">(ch. 21)</span></td></tr>
-        <tr><td><b>Part 4</b></td><td>Uneven contests and who chooses to compete <span class="small">(ch. 22–23)</span></td></tr>
-        <tr><td><b>Part 5</b></td><td>The exam model: Oct 2025 Q3, fully solved, plus practice</td></tr>
-      </table>
-    </div>
-    <div>
-      <div class="box exam"><h3>Why this matters for 23 Oct</h3>
-        Tournaments were <b>Question 3 of the Oct 2025 final: 10 points</b>, a sixth of the exam. The question used Dur's own two-period version of the model, so Part 5 is the most exam-critical part.</div>
-      <div class="box"><h3>How to use this deck</h3>
-        <b>→ / Space</b> next step · <b>←</b> back · <b>N</b> toggle notes view (everything on one scrolling page) · drag the sliders in every diagram. Labels: <span class="tag book">Kuhn</span> book result · <span class="tag exam">Exam</span> past exam · <span class="tag ill">Illustration</span> constructed example, not from the book.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 2. WHY ============ -->
-<section class="slide" data-title="What is a tournament?">
-  <div class="kicker">Part 1 · The idea</div>
-  <h1>What makes pay a "tournament"?</h1>
-  <div class="cols">
-    <div>
-      <p>In a <b>tournament</b>, your pay depends on how you <b>rank</b> relative to others, not on how much you produce in absolute terms.</p>
-      <ul>
-        <li>A promotion: two managers compete; the better one gets the VP job and its raise.</li>
-        <li>"Salesperson of the month" bonus.</li>
-        <li>Partner track at a law or consulting firm.</li>
-        <li>Chicken farmers paid by rank against other farmers (Kuhn 20.9).</li>
-      </ul>
-      <p>Two features matter:</p>
-      <ol>
-        <li><b>The prizes are fixed in advance.</b> The firm commits to "the winner gets $S$ more", whatever the output turns out to be.</li>
-        <li><b>Only the ranking matters.</b> The firm only needs to know <em>who</em> did better, not <em>how much</em> better.</li>
-      </ol>
-    </div>
-    <div>
-      <div class="box key"><h3>The puzzle this explains</h3>
-        Why does a newly promoted VP get a 50% raise, when she is doing roughly the same work as the day before? Tournament theory: <b>the raise is not paying for her current job. It is the prize that made everyone below her work hard for years.</b> The prize does not need to equal anyone's marginal product.</div>
-      <div class="box"><h3>The big question of this lecture</h3>
-        Can a firm get workers to supply the <em>efficient</em> amount of effort just by choosing two numbers: a <b>base pay</b> $a$ that everyone gets, and a <b>prize spread</b> $S$ that only the winner gets on top?</div>
-      <p class="small"><span class="tag book">Kuhn</span> 20.1, pdf p. 364–366.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 3. SETUP ============ -->
-<section class="slide" data-title="The model setup">
-  <div class="kicker">Part 1 · Setup <span class="tag book">Kuhn 20.1</span></div>
-  <h1>The basic two-player model</h1>
-  <div class="cols wide-right">
-    <div>
-      <table>
-        <tr><th>Symbol</th><th>Meaning</th></tr>
-        <tr><td>$E_i$</td><td>effort of worker $i$ (chosen by the worker)</td></tr>
-        <tr><td>$d$</td><td>productivity of effort (same for both: a <em>symmetric</em> contest)</td></tr>
-        <tr><td>$\varepsilon_i$</td><td>luck: random, mean 0, not controlled by anyone</td></tr>
-        <tr><td>$Q_i = dE_i + \varepsilon_i$</td><td>measured output</td></tr>
-        <tr><td>$E_i^2/2$</td><td>cost of effort (in money terms): marginal cost $= E_i$, rising</td></tr>
-        <tr><td>$a$</td><td>base pay (what the loser gets)</td></tr>
-        <tr><td>$a+S$</td><td>pay of the winner; $S$ = <b>prize spread</b></td></tr>
-      </table>
-      <p class="small">Workers are risk neutral: they care about <em>expected</em> pay minus effort cost.</p>
-    </div>
-    <div class="fig">
-      <svg viewBox="0 0 560 330" id="figSetup">
-        <rect class="nodeA" x="10" y="30" width="150" height="70" rx="10"/>
-        <text class="lbl" x="85" y="60" text-anchor="middle">Worker 1</text>
-        <text x="85" y="82" text-anchor="middle">chooses E₁</text>
-        <rect class="nodeA" x="10" y="200" width="150" height="70" rx="10"/>
-        <text class="lbl" x="85" y="230" text-anchor="middle">Worker 2</text>
-        <text x="85" y="252" text-anchor="middle">chooses E₂</text>
-        <rect class="node" x="210" y="30" width="150" height="70" rx="10"/>
-        <text class="lbl" x="285" y="60" text-anchor="middle">Q₁ = dE₁ + ε₁</text>
-        <text x="285" y="82" text-anchor="middle">effort + luck</text>
-        <rect class="node" x="210" y="200" width="150" height="70" rx="10"/>
-        <text class="lbl" x="285" y="230" text-anchor="middle">Q₂ = dE₂ + ε₂</text>
-        <text x="285" y="252" text-anchor="middle">effort + luck</text>
-        <rect class="nodeB" x="400" y="115" width="150" height="70" rx="10"/>
-        <text class="lbl" x="475" y="145" text-anchor="middle">Compare</text>
-        <text x="475" y="167" text-anchor="middle">higher Q wins</text>
-        <path class="arrow" d="M160 65 L208 65"/><path class="arrow" d="M160 235 L208 235"/>
-        <path class="arrow" d="M360 65 C390 65 380 130 398 140"/><path class="arrow" d="M360 235 C390 235 380 170 398 160"/>
-        <text class="lbl" x="475" y="225" text-anchor="middle">Winner: a + S</text>
-        <text class="lbl" x="475" y="250" text-anchor="middle">Loser: a</text>
-        <path class="arrow" d="M475 186 L475 208"/>
-      </svg>
-      <div class="cap">Effort raises your <em>expected</em> output, but luck means the harder worker does not always win.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 4. WHO WINS ============ -->
-<section class="slide" data-title="When does worker 1 win?">
-  <div class="kicker">Part 1 · Probability of winning <span class="tag book">Kuhn 20.2</span></div>
-  <h1>Step 1: when does worker 1 win?</h1>
-  <p class="lead">Everything in this model runs through one object: the probability that you win, and how much your effort changes it.</p>
-  <ol class="derive big">
-    <li class="step">Worker 1 wins if her measured output is higher:
-      $$Q_1 > Q_2 \iff dE_1+\varepsilon_1 > dE_2+\varepsilon_2$$</li>
-    <li class="step">Put the effort terms on one side and the luck terms on the other:
-      $$d(E_1-E_2) \;>\; \varepsilon_2-\varepsilon_1 \;\equiv\; \varepsilon$$
-      <span class="why">$\varepsilon$ is <b>relative luck</b>: how much luckier worker 2 was than worker 1.</span></li>
-    <li class="step">So worker 1 wins exactly when relative luck is <b>below</b> her effort advantage:
-      $$p_1 = \Pr\big(\varepsilon < d(E_1-E_2)\big)$$
-      <span class="why">Her effort advantage $d(E_1-E_2)$ is a threshold. Worker 2 needs to be at least that much luckier to beat her.</span></li>
-  </ol>
-  <div class="box key step"><b>Notice:</b> only the <em>difference</em> in efforts matters, and only <em>relative</em> luck matters. If both workers are hit by the same shock, it cancels. That will become a key advantage of tournaments in Part 2.</div>
-</section>
-
-<!-- ============ 5. UNIFORM LUCK ============ -->
-<section class="slide" data-title="Uniform luck → probability">
-  <div class="kicker">Part 1 · Probability of winning <span class="tag book">Kuhn 20.2, Result 20.1</span></div>
-  <h1>Step 2: turn the threshold into a probability</h1>
-  <div class="cols wide-right">
-    <div>
-      <p>Assume relative luck $\varepsilon$ is <b>uniform</b> on $[-R/2,\,R/2]$. Its density is flat at height $1/R$. Call that height $\alpha = 1/R$.</p>
-      <ol class="derive">
-        <li class="step">Probability = area under the density to the left of the threshold $x = d(E_1-E_2)$.</li>
-        <li class="step">That area is a rectangle: width $\big(x + R/2\big)$, height $1/R$:
-          $$p_1 = \frac{x+R/2}{R} = \frac12 + \frac{x}{R}$$</li>
-        <li class="step">Substitute $x$ and $\alpha = 1/R$:
-          <div class="result"><b>Result 20.1</b> $$p_1 = \tfrac12 + \alpha d\,(E_1-E_2)$$ valid as long as $|d(E_1-E_2)| \le R/2$; otherwise $p_1$ is 0 or 1.</div></li>
-      </ol>
-    </div>
-    <div class="fig">
-      <svg viewBox="0 0 520 300" id="figUniform"></svg>
-      <div class="ctrl">
-        <label for="uGap">Effort gap $E_1-E_2$</label><input id="uGap" type="range" min="-3" max="3" step="0.1" value="1"><output id="uGapO"></output>
-        <label for="uR">Luck range $R$</label><input id="uR" type="range" min="4" max="20" step="0.5" value="10"><output id="uRO"></output>
-      </div>
-      <div class="readout" id="uRead"></div>
-      <div class="cap">Shaded area = probability worker 1 wins ($d=1$). A wider luck range $R$ means a flatter density, so a given effort gap buys less probability.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 6. READING RESULT 20.1 ============ -->
-<section class="slide" data-title="Reading the win probability">
-  <div class="kicker">Part 1 · Probability of winning</div>
-  <h1>Reading $p_1 = \tfrac12 + \alpha d(E_1-E_2)$</h1>
-  <div class="cols wide-right">
-    <div>
-      <table>
-        <tr><th>Piece</th><th>Meaning</th></tr>
-        <tr><td>$\tfrac12$</td><td>With equal effort you have a coin-flip chance: the contest is <em>fair</em> and <em>symmetric</em>.</td></tr>
-        <tr><td>$\alpha d$</td><td>The <b>marginal effect of effort on your winning chance</b>: $\partial p_1/\partial E_1 = \alpha d$. This is the number that drives effort.</td></tr>
-        <tr><td>$\alpha = 1/R$</td><td><b>Precision of performance measurement.</b> Little luck (small $R$) means a big $\alpha$: effort shows up clearly in the ranking.</td></tr>
-        <tr><td>$d$</td><td>Productivity. More productive effort moves your output, and hence your rank, more.</td></tr>
-      </table>
-      <div class="box warn"><h3>Watch the notation</h3>In Kuhn, $R$ is the <b>range of luck</b>. In the Oct 2025 exam, $R$ is the <b>price of output</b> and the probability slope is called $\pi$. Never mix them.</div>
-    </div>
-    <div class="fig">
-      <svg viewBox="0 0 520 300" id="figProb"></svg>
-      <div class="ctrl">
-        <label for="pE2">Rival's effort $E_2$</label><input id="pE2" type="range" min="1" max="7" step="0.1" value="4"><output id="pE2O"></output>
-        <label for="pR">Luck range $R$</label><input id="pR" type="range" min="2" max="16" step="0.5" value="8"><output id="pRO"></output>
-        <label for="pN">Smooth (normal) luck</label><input id="pN" type="checkbox"><output></output>
-      </div>
-      <div class="cap">Worker 1's win probability as a function of her own effort ($d=1$). Uniform luck: a straight line between kinks A and B (Kuhn Fig. 22.1). Tick the box for a normal luck distribution: an S-curve, steepest where efforts are equal (Fig. 22.2).</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 7. WORKER'S PROBLEM ============ -->
-<section class="slide" data-title="The worker's problem">
-  <div class="kicker">Part 1 · Optimal effort <span class="tag book">Kuhn 20.3</span></div>
-  <h1>Step 3: how hard does each worker work?</h1>
-  <ol class="derive big">
-    <li class="step">Expected pay: the base $a$ for sure, plus the prize $S$ with probability $p_1$. Subtract effort cost:
-      $$EU_1 = a + p_1 S - \frac{E_1^2}{2} = a + \Big[\tfrac12 + \alpha d(E_1-E_2)\Big] S - \frac{E_1^2}{2}$$</li>
-    <li class="step">Take the derivative with respect to <b>her own</b> effort, treating $E_2$ as given:
-      $$\frac{\partial EU_1}{\partial E_1} = \underbrace{\alpha d\, S}_{\text{marginal benefit}} - \underbrace{E_1}_{\text{marginal cost}} = 0$$
-      <span class="why">Marginal benefit = (extra win probability per unit of effort) × (size of the prize). Marginal cost = the derivative of $E_1^2/2$.</span></li>
-    <li class="step"><div class="result"><b>Optimal effort</b> $$E_1 = \alpha d S \qquad\text{and by symmetry}\qquad E_2 = \alpha d S$$ Second-order condition: $\partial^2 EU_1/\partial E_1^2 = -1 < 0$, so this is a maximum.</div></li>
-  </ol>
-  <div class="box key step"><b>Special feature of uniform luck:</b> $E_2$ dropped out of the FOC. Your best effort does not depend on what your rival does: it is a <b>dominant strategy</b>. With other luck distributions, effort depends on the rival's, and that makes behaviour harder to predict (Result 20.5).</div>
-</section>
-
-<!-- ============ 8. MB = MC DIAGRAM ============ -->
-<section class="slide" data-title="Marginal benefit = marginal cost">
-  <div class="kicker">Part 1 · Optimal effort</div>
-  <h1>See it: marginal benefit meets marginal cost</h1>
-  <div class="cols wide-right">
-    <div>
-      <p>The marginal benefit of effort is a <b>flat line</b> at $\alpha d S$: every extra unit of effort adds the same $\alpha d$ to your win chance, worth $S$.</p>
-      <p>The marginal cost is the <b>rising line</b> $E$.</p>
-      <p>They cross at $E = \alpha d S$. The dashed line marks the <b>efficient</b> effort $E^*=d$ (next slides). Try to make the two meet by moving $S$.</p>
-      <div class="box"><b>Comparative statics</b>, all from $E=\alpha dS = dS/R$:
-        <table>
-          <tr><td>Bigger prize $S$</td><td>↑ effort: more at stake</td></tr>
-          <tr><td>More productive $d$</td><td>↑ effort: effort moves the rank more</td></tr>
-          <tr><td>Noisier measurement (↑$R$, ↓$\alpha$)</td><td>↓ effort: luck drowns effort out</td></tr>
-          <tr><td>Base pay $a$</td><td>no effect on effort: you get it win or lose</td></tr>
-        </table></div>
-    </div>
-    <div class="fig">
-      <svg viewBox="0 0 520 320" id="figMB"></svg>
-      <div class="ctrl">
-        <label for="mS">Prize spread $S$</label><input id="mS" type="range" min="0" max="20" step="0.5" value="10"><output id="mSO"></output>
-        <label for="mA">Precision $\alpha$</label><input id="mA" type="range" min="0.02" max="0.25" step="0.01" value="0.1"><output id="mAO"></output>
-        <label for="mD">Productivity $d$</label><input id="mD" type="range" min="1" max="6" step="0.5" value="4"><output id="mDO"></output>
-      </div>
-      <div class="readout" id="mRead"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 9. EQUILIBRIUM ============ -->
-<section class="slide" data-title="Equilibrium: luck decides">
-  <div class="kicker">Part 1 · Equilibrium <span class="tag book">Kuhn Result 20.2</span></div>
-  <h1>In equilibrium, both work hard, and luck decides</h1>
-  <div class="cols">
-    <div>
-      <p>Both workers choose $E = \alpha dS$. Plug equal efforts into Result 20.1:</p>
-      $$p_1 = \tfrac12 + \alpha d\,(\alpha dS - \alpha dS) = \tfrac12$$
-      <div class="result"><b>Result 20.2</b> In a symmetric tournament everyone picks the same effort, so everyone has the same chance of winning. <b>The winner is decided purely by luck.</b></div>
-      <p>This sounds paradoxical, but it is the whole point. The prize does not exist to identify the hardest worker. It exists to make <em>both</em> work hard. Each is running to avoid falling behind (a "rat race"), and in equilibrium neither gets ahead.</p>
-    </div>
-    <div>
-      <div class="box exam"><h3>Exam use</h3>"Since workers choose the same effort, it holds that $p_i = p_j = \tfrac12$" was worth <b>1 point on its own</b> in Oct 2025 Q3b. Always state it explicitly before writing the participation constraint.</div>
-      <div class="box"><h3>Check your understanding</h3>
-        If the winner is chosen by luck anyway, why not just give both workers $a + S/2$ for sure?
-        <details><summary>Answer</summary>Because then effort no longer changes your pay at all: $\partial EU/\partial E = -E$, so $E=0$. The <em>possibility</em> of losing is what creates the incentive, even though in equilibrium the outcome is a coin flip.</details></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 10. EFFICIENCY ============ -->
-<section class="slide" data-title="Efficient effort">
-  <div class="kicker">Part 1 · Efficiency <span class="tag book">Kuhn 20.4, Result 20.3</span></div>
-  <h1>Step 4: what effort is efficient?</h1>
-  <div class="cols wide-right">
-    <div>
-      <ol class="derive">
-        <li class="step"><b>Total surplus</b> = firm's profit + workers' utility. All wage payments ($a$, $S$) are transfers from firm to workers, so they <b>cancel</b>:
-          $$TS = \underbrace{d(E_1+E_2)}_{\text{expected output}} - \underbrace{\tfrac{E_1^2}{2}-\tfrac{E_2^2}{2}}_{\text{effort costs}}$$</li>
-        <li class="step">Maximise with respect to each $E_i$:
-          $$\frac{\partial TS}{\partial E_i} = d - E_i = 0$$</li>
-        <li class="step"><div class="result"><b>Result 20.3</b> Efficient effort is $E_i^* = d$: work until the marginal product of effort ($d$) equals its marginal cost ($E_i$).</div></li>
-      </ol>
-      <p class="small">This does not depend on how workers are paid. It is a property of technology and preferences only.</p>
-    </div>
-    <div class="fig">
-      <svg viewBox="0 0 520 300" id="figTS"></svg>
-      <div class="ctrl">
-        <label for="tD">Productivity $d$</label><input id="tD" type="range" min="1" max="6" step="0.5" value="4"><output id="tDO"></output>
-        <label for="tE">Actual effort $E$</label><input id="tE" type="range" min="0" max="8" step="0.1" value="2"><output id="tEO"></output>
-      </div>
-      <div class="readout" id="tRead"></div>
-      <div class="cap">Surplus per worker $dE - E^2/2$. The peak is at $E=d$. The red area is the surplus lost when effort is too low or too high.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 11. OPTIMAL TOURNAMENT ============ -->
-<section class="slide" data-title="Designing the optimal tournament">
-  <div class="kicker">Part 1 · Design <span class="tag book">Kuhn 20.5</span></div>
-  <h1>Step 5: design the contest. $S$ for effort, $a$ for participation</h1>
-  <div class="cols">
-    <div>
-      <h2>Prize spread → efficient effort</h2>
-      <ol class="derive">
-        <li class="step">Workers choose $E = \alpha dS$. We want $E = d$.</li>
-        <li class="step">Set them equal: $\alpha d S = d$, so
-          <div class="result">$$S^* = \frac{1}{\alpha} = R$$ The optimal prize spread equals the range of luck.</div>
-          <span class="why">Noisier measurement ⇒ a bigger prize is needed. When luck matters more, each unit of effort moves the win chance less, so the stakes must rise to compensate.</span></li>
-      </ol>
-    </div>
-    <div>
-      <h2>Base pay → participation</h2>
-      <ol class="derive">
-        <li class="step">A worker joins only if expected utility ≥ her outside option $\bar U$. With $p = \tfrac12$ and $E=d$:
-          $$a + \tfrac12 S - \tfrac{d^2}{2} \ge \bar U$$</li>
-        <li class="step">The firm pays no more than needed, so this <b>binds</b>:
-          $$a = \bar U - \tfrac12 S + \tfrac{d^2}{2}$$</li>
-        <li class="step"><div class="box key" style="margin:0"><b>Division of labour:</b> $S$ creates the incentive, $a$ only splits the pie. A bigger prize lets the firm <em>lower</em> base pay one-for-one in expectation ($-\tfrac12$ per unit of $S$). $a$ can even be negative, like an entry fee.</div></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 12. KUHN EXAMPLE ============ -->
-<section class="slide" data-title="Kuhn's worked example">
-  <div class="kicker">Part 1 · Worked example <span class="tag book">Kuhn 20.5, Table 20.1</span></div>
-  <h1>Kuhn's numbers: $\alpha = 0.1$, $d = 4$, $\bar U = 6$</h1>
-  <div class="cols">
-    <div>
-      <ol class="derive">
-        <li class="step">Efficient effort: $E^* = d = 4$.</li>
-        <li class="step">Prize spread: $S = 1/\alpha = 10$. Check: $E = \alpha d S = 0.1\cdot4\cdot10 = 4$ ✓</li>
-        <li class="step">Base pay: $a = \bar U - S/2 + d^2/2 = 6 - 5 + 8 = 9$</li>
-        <li class="step">Expected output $= dE = 16$; expected pay $= a + S/2 = 14$; utility $= 14 - 4^2/2 = 6 = \bar U$ ✓</li>
-        <li class="step">Profit per worker $= 16 - 14 = 2$.</li>
-      </ol>
-    </div>
-    <div class="step">
-      <table>
-        <tr><th></th><th>Tournament<br>$a=9,\ S=10$</th><th>Piece rate<br>$a=-2,\ b=1$</th></tr>
-        <tr><td>Effort</td><td>$\alpha dS = 4$</td><td>$bd = 4$</td></tr>
-        <tr><td>Expected output</td><td>16</td><td>16</td></tr>
-        <tr><td>Expected pay</td><td>$9 + 0.5\cdot10 = 14$</td><td>$-2 + 1\cdot16 = 14$</td></tr>
-        <tr><td>Utility</td><td>$14 - 8 = 6$</td><td>$14 - 8 = 6$</td></tr>
-        <tr><td>Profit / worker</td><td>2</td><td>2</td></tr>
-      </table>
-      <div class="result"><b>Result 20.4 (equivalence)</b> With risk-neutral workers, a tournament can reproduce <em>any</em> outcome a piece rate can, including the efficient one. Same effort, same pay, same profit.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 13. WHY TOURNAMENTS THEN ============ -->
-<section class="slide" data-title="Why use tournaments at all?">
-  <div class="kicker">Part 2 · Advantages <span class="tag book">Kuhn 20.6–20.9, Results 20.9–20.11</span></div>
-  <h1>If they're equivalent, why do firms use tournaments?</h1>
-  <p class="lead">The equivalence holds only in the simple model. In practice rank-based pay has real advantages:</p>
-  <div class="cols3">
-    <div class="box key"><h3>1 · Only a ranking is needed</h3>Often it's easy to say <em>who</em> did better (which manager ran the better branch) but hard to measure output in units. A piece rate needs a cardinal measure; a tournament only an ordinal one.</div>
-    <div class="box key"><h3>2 · The firm can't cheat</h3>Under a piece rate the firm has an incentive to understate output to pay less. In a tournament the prize budget is fixed: misreporting who won saves nothing (Result 20.11).</div>
-    <div class="box key"><h3>3 · Insurance against common shocks</h3>A bad market hits everyone. Relative pay filters it out, so workers aren't punished for things nobody controls (Result 20.10; next slide).</div>
-  </div>
-  <div class="cols3">
-    <div class="box"><h3>4 · No ratchet</h3>When a new technology raises everyone's output, piece rates must be renegotiated. A tournament prize stays valid automatically (Result 20.11).</div>
-    <div class="box"><h3>5 · Risk can be lower</h3>Pay only takes two values ($a$ or $a+S$), with no extreme outcomes, so a risk-averse worker may prefer it (Result 20.9). Not guaranteed: the rival's luck adds noise.</div>
-    <div class="box warn"><h3>Costs (Part 3)</h3>Rank pay invites sabotage, collusion and excessive risk-taking, and it backfires when contestants are unequal (Part 4).</div>
-  </div>
-</section>
-
-<!-- ============ 14. COMMON SHOCKS ============ -->
-<section class="slide" data-title="Common shocks cancel">
-  <div class="kicker">Part 2 · Common shocks <span class="tag book">Kuhn Result 20.10, 20.9 broilers</span></div>
-  <h1>A shock that hits everyone cancels out of the ranking</h1>
-  <div class="cols wide-right">
-    <div>
-      <p>Add a <b>common shock</b> $c$ (weather, recession) that hits both workers equally:</p>
-      $$Q_i = dE_i + c + \varepsilon_i$$
-      $$Q_1 - Q_2 = d(E_1-E_2) + (\varepsilon_1 - \varepsilon_2)$$
-      <p>$c$ disappears. Who wins, and so everyone's pay, does not depend on it. Under a piece rate, pay $= a + bQ_i$ would fall with $c$.</p>
-      <div class="box"><b>Example (Kuhn 20.9):</b> chicken ("broiler") growers are paid relative to other growers supplied with the same chicks and feed in the same period. A bad batch of chicks hurts everyone equally and so costs nobody their bonus.</div>
-    </div>
-    <div class="fig">
-      <svg viewBox="0 0 520 300" id="figCommon"></svg>
-      <div class="ctrl">
-        <label for="cC">Common shock $c$</label><input id="cC" type="range" min="-8" max="8" step="0.5" value="0"><output id="cCO"></output>
-      </div>
-      <div class="readout" id="cRead"></div>
-      <div class="cap">Both outputs fall together, but the gap, and so the winner, is unchanged. Compare a piece-rate worker's pay, which moves with $c$. <span class="tag ill">Illustration</span> $d=1,\ E_1=6,\ E_2=4$, $b=1$.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 15. MANY PLAYERS & SEQUENTIAL ============ -->
-<section class="slide" data-title="Many players, stages, feedback">
-  <div class="kicker">Part 2 · Extensions <span class="tag book">Kuhn 20.7, Results 20.5–20.8</span></div>
-  <h1>More players, sequential contests, feedback</h1>
-  <div class="cols">
-    <div>
-      <h2>Adding contestants for one fixed prize (Result 20.6)</h2>
-      <p>Two forces pull in opposite directions:</p>
-      <ul>
-        <li><b>1/N effect (↓ effort):</b> with more rivals, each has a smaller chance of winning, so the prize is less "reachable".</li>
-        <li><b>Competition effect (↑ effort):</b> you now have to beat more people. With one player, a promotion is automatic and nobody works.</li>
-      </ul>
-      <p>Net effect is ambiguous. With independent uniform luck the two exactly cancel. Implication: a firm can sometimes raise incentives by opening a prize to more people <em>without</em> making it bigger.</p>
-      <h2>Strategy (Result 20.5)</h2>
-      <p>Except under uniform luck, your best effort depends on your forecast of rivals' effort, so behaviour in tournaments is more variable than under piece rates.</p>
-    </div>
-    <div>
-      <h2>Sequential contests (Result 20.7)</h2>
-      <p>If contestants see each other's results along the way (sales month, sports), early luck creates a leader. A symmetric contest turns into an <b>uneven</b> one once it starts: the leader can coast, and the trailer may give up (see Part 4).</p>
-      <h2>Feedback (Result 20.8)</h2>
-      <p>So it is <b>not always optimal to tell workers who is ahead</b>. If one is far ahead, both may cut effort. Keeping the race "close" in workers' minds can keep both working.</p>
-      <div class="box warn"><b>Exam angle:</b> these are verbal "explain the two effects" questions. Name both channels, give the direction of each, and say the net effect is ambiguous.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 16. DIVIDER PART 3 ============ -->
-<section class="slide divider" data-title="Part 3: what goes wrong">
-  <div class="kicker">Part 3 · Kuhn ch. 21</div>
-  <h1>What goes wrong: sabotage, collusion, gambling</h1>
-  <p class="lead">All three come from the same root: <b>a tournament rewards your rank, not your output.</b> Anything that improves your rank pays, including hurting your rival, agreeing with your rival to slack off, or simply rolling the dice.</p>
-</section>
-
-<!-- ============ 17. SABOTAGE ============ -->
-<section class="slide" data-title="Sabotage">
-  <div class="kicker">Part 3 · Sabotage <span class="tag book">Kuhn 21.1, Results 21.1–21.4</span></div>
-  <h1>Sabotage: lowering your rival's output also wins</h1>
-  <div class="cols">
-    <div>
-      <p>You win when $Q_1 - Q_2$ is large. There are <b>two</b> ways to raise it: raise $Q_1$ (productive effort) or lower $Q_2$ (sabotage, unhelpfulness, bad-mouthing the rival to the boss).</p>
-      <p><span class="tag ill">Illustration</span> Let sabotage $s_1$ cut the rival's measured output one-for-one, at cost $\kappa s_1^2/2$:</p>
-      $$p_1 = \tfrac12 + \alpha\big[d(E_1-E_2) + s_1 - s_2\big]$$
-      $$\frac{\partial EU_1}{\partial s_1} = \alpha S - \kappa s_1 = 0 \;\Rightarrow\; s_1 = \frac{\alpha S}{\kappa}$$
-      <div class="box key">Sabotage rises with the prize $S$, exactly like effort does. A bigger prize buys more effort <em>and</em> more sabotage. That is why firms with strong cooperation needs often <b>compress</b> pay differences (smaller $S$).</div>
-    </div>
-    <div>
-      <div class="box"><h3>Evidence: Carpenter et al. (2010)</h3>
-        Workers stuffed envelopes and graded each other's output. Adding a prize for the top performer led to:
-        <ul>
-          <li><b>Directed sabotage</b>: workers understated the quality and quantity of their peers' work, but only of peers who were <em>ahead</em> (Result 21.1).</li>
-          <li><b>Lower real output</b>: expecting to be sabotaged, workers put in less effort (Result 21.2).</li>
-          <li>Profits fell, worker utility rose, and total surplus fell (Results 21.3–21.4).</li>
-        </ul></div>
-      <div class="box warn"><b>Exam-style:</b> "Why might introducing a prize for the best worker <em>reduce</em> output?" → it rewards lowering others' measured output, and workers who expect sabotage find effort less rewarding.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 18. COLLUSION ============ -->
-<section class="slide" data-title="Collusion">
-  <div class="kicker">Part 3 · Collusion <span class="tag book">Kuhn 21.2, Result 21.5</span></div>
-  <h1>Collusion: "let's both slack off"</h1>
-  <div class="cols">
-    <div>
-      <p>If both workers cut effort by the same amount, the effort gap is unchanged, so <b>each still wins with probability ½</b>, but both save on effort cost. Workers gain; the firm loses all the output.</p>
-      <p><span class="tag ill">Illustration</span> Kuhn's example ($a=9,\ S=10,\ \alpha=0.1,\ d=4$), expected utilities:</p>
-      <table>
-        <tr><th>Worker 1 \ Worker 2</th><th>Work hard</th><th>Shirk ($E=0$)</th></tr>
-        <tr><td>Work</td><td>6, 6</td><td>18.2*, 9</td></tr>
-        <tr><td>Shirk</td><td>9, 18.2*</td><td><b>14, 14</b></td></tr>
-      </table>
-      <p class="small">Work hard = the equilibrium effort $E=4$. *Against a shirker, the best deviation is just effort 1.25, which already wins for sure: $\tfrac12 + 0.4\cdot1.25 = 1$, so $EU = 9 + 10 - 1.25^2/2 \approx 18.2$.</p>
-    </div>
-    <div>
-      <div class="box key">Collusion (14, 14) beats the equilibrium (6, 6) for both, but each is tempted to secretly work and win for sure. It's a <b>prisoners' dilemma</b>: collusion survives only if cheating can be <b>seen and punished</b>.</div>
-      <div class="box"><h3>Evidence: Bandiera et al. (2005), fruit pickers</h3>
-        Under relative pay (the day's piece rate fell when the field's average output rose), pickers held back output. When the farm went back to a piece rate fixed in advance, productivity rose by 59% with no rise in wage costs.
-        <ul><li>Collusion was stronger when pickers worked with <b>friends</b>.</li>
-        <li>It happened only for fruit where pickers <b>could see each other's output</b>.</li></ul></div>
-      <p><b>Remedies:</b> larger or reshuffled groups, confidential performance information, rivals who don't interact.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 19. RISK TAKING ============ -->
-<section class="slide" data-title="Risk-taking">
-  <div class="kicker">Part 3 · Risk-taking <span class="tag book">Kuhn 21.3, Results 21.6–21.7</span></div>
-  <h1>Gambling: when you're behind, add noise</h1>
-  <div class="cols wide-right">
-    <div>
-      <p>A worker who is <b>behind</b> can't win by being a bit better: she needs luck. So she likes actions that make outcomes <b>more random</b>, even if they don't raise (or even lower) expected output.</p>
-      <p>A worker who is <b>ahead</b> wants the opposite: play safe and lock in the lead.</p>
-      <div class="box"><h3>Evidence: mutual funds (Brown, Harlow & Starks 1996)</h3>Fund managers paid on year-end ranking who were <b>behind at mid-year</b> made their portfolios riskier for the rest of the year, actively selling safe assets and buying risky ones.</div>
-      <p class="small">Result 21.6: risk-enhancing actions are most attractive to less able agents and to those behind in a sequential contest.</p>
-    </div>
-    <div class="fig">
-      <svg viewBox="0 0 520 300" id="figRisk"></svg>
-      <div class="ctrl">
-        <label for="rGap">Mean lead (+ ahead, − behind)</label><input id="rGap" type="range" min="-4" max="4" step="0.1" value="-2"><output id="rGapO"></output>
-        <label for="rSig">Riskiness $\sigma$</label><input id="rSig" type="range" min="0.5" max="6" step="0.1" value="1.5"><output id="rSigO"></output>
-      </div>
-      <div class="readout" id="rRead"></div>
-      <div class="cap"><span class="tag ill">Illustration</span> Normal noise: $p(\text{win}) = \Phi(\text{lead}/\sigma)$. Behind: more risk pushes the win chance <b>up</b> toward ½. Ahead: more risk pushes it <b>down</b>.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 20. DIVIDER PART 4 ============ -->
-<section class="slide divider" data-title="Part 4: uneven contests">
-  <div class="kicker">Part 4 · Kuhn ch. 22–23</div>
-  <h1>Uneven contests and who chooses to compete</h1>
-  <p class="lead">So far both contestants were equally able. What if one is much better, and who signs up for a tournament in the first place?</p>
-</section>
-
-<!-- ============ 21. ASYMMETRIC ============ -->
-<section class="slide" data-title="Uneven tournaments">
-  <div class="kicker">Part 4 · Asymmetric contests <span class="tag book">Kuhn 22.1, Result 22.1</span></div>
-  <h1>Uneven contests blunt <em>both</em> players' incentives</h1>
-  <div class="cols wide-right">
-    <div>
-      <p>What drives effort is the <b>slope</b> of the win probability: how much one more unit of effort raises your chance. With realistic (smooth) luck, that slope is steepest when the race is <b>close</b>.</p>
-      <ul>
-        <li><b>The weak player</b> (vs. Tiger Woods): even maximum effort barely moves her chance off zero. Why try?</li>
-        <li><b>The strong player</b>: wins almost surely anyway. Why try?</li>
-      </ul>
-      <div class="result"><b>Result 22.1</b> For a given prize $S$, both players supply less effort in an asymmetric tournament than in a symmetric one.</div>
-      <div class="box"><h3>Evidence: the Tiger Woods effect (Brown 2011, Result 22.2)</h3>Other golfers scored significantly <b>worse</b> in tournaments where Tiger Woods played than when he was absent. With the top prize effectively "taken", rivals eased off. <span class="small">(The extracted text of Kuhn's Result 22.2 reads the other way round; the surrounding discussion and Brown's paper confirm: worse when Woods was present.)</span></div>
-    </div>
-    <div class="fig">
-      <svg viewBox="0 0 520 300" id="figAsym"></svg>
-      <div class="ctrl">
-        <label for="aGap">Ability advantage of rival</label><input id="aGap" type="range" min="-5" max="5" step="0.1" value="0"><output id="aGapO"></output>
-      </div>
-      <div class="readout" id="aRead"></div>
-      <div class="cap">Kuhn Figs 22.2–22.4 as a live graph. <span class="tag ill">Illustration</span> Normal luck; you face a rival at effort 5. Shifting the curve (uneven ability) flattens it in the feasible effort range: the marginal win chance at your effort (gold tangent) collapses.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 22. FIXES ============ -->
-<section class="slide" data-title="Fair rules, leagues, handicaps">
-  <div class="kicker">Part 4 · Fixes <span class="tag book">Kuhn 22.3, Results 22.3–22.5</span></div>
-  <h1>Fixing uneven contests: fair rules, leagues, handicaps</h1>
-  <div class="cols3">
-    <div class="box key"><h3>Equal players → fair rules</h3>When contestants are equally able, profits are highest when the best measured performance wins and the rules are <em>seen</em> to be fair (Result 22.3). Any bias makes the contest uneven and so lowers effort.</div>
-    <div class="box key"><h3>Leagues</h3>Group workers of similar ability into separate contests (sales divisions, sports leagues). Everyone has a real chance of winning and a real risk of losing (Result 22.4).</div>
-    <div class="box key"><h3>Handicaps</h3>If unequal players must compete, make the stronger one beat a point spread. This raises <b>both</b> players' effort at no cost to the principal (Result 22.5). Then a less able player can win with a worse performance.</div>
-  </div>
-  <div class="box warn"><h3>Fair vs symmetric: don't mix them up</h3>
-    <b>Fair</b> = a property of the <em>rules</em> (better measured performance wins). <b>Symmetric</b> = a property of the <em>players</em> (same ability and costs). A perfectly fair contest between Tiger Woods and you is still very uneven. A handicap deliberately makes the rules <em>unfair</em> to make the contest more <em>even</em>.</div>
-  <p class="small">Note the trade-off: the best rule for <em>incentives</em> (handicap) may not be the best rule for <em>selecting</em> who should get the job. A firm can separate the two by paying a bonus based on handicapped results but promoting on raw ability.</p>
-</section>
-
-<!-- ============ 23. MULTISTAGE ============ -->
-<section class="slide" data-title="Promotion ladders">
-  <div class="kicker">Part 4 · Multistage contests <span class="tag book">Kuhn 22.4, Results 22.6–22.10</span></div>
-  <h1>Promotion ladders: why the top prize is so big</h1>
-  <div class="cols">
-    <div>
-      <p>A career is a sequence of tournaments: analyst → manager → VP → CEO. Winning one round also buys a <b>ticket to the next round</b>.</p>
-      <ul>
-        <li>Lower rounds: the prize = the raise <em>plus</em> the option value of competing later.</li>
-        <li>The <b>final round</b> has no "later". The whole incentive must come from the raise itself, so the top prize must be very large.</li>
-      </ul>
-      <div class="box key">This is the tournament explanation of <b>skewed executive pay</b>: a CEO's pay jump is not just reward for CEO work. It keeps vice-presidents (and everyone below them) running.</div>
-      <p class="small">Rosen's ability-learning model (Result 22.6): when firms learn about ability as people move up, the raises needed are smaller at the bottom and top of the ladder and larger in the middle.</p>
-    </div>
-    <div>
-      <table>
-        <tr><th>Result</th><th>Idea in one line</th></tr>
-        <tr><td>22.7 Meyer (1991)</td><td>Busy top managers may bias contests toward early leaders: trailers become "invisible" unless they win big.</td></tr>
-        <tr><td>22.8 Upsets</td><td>Mixed-ability pools create surprising wins that reveal talent to outside employers, which raises early effort.</td></tr>
-        <tr><td>22.9 Option value</td><td>Mixing abilities early can raise effort, because strong players then face weaker opponents later.</td></tr>
-        <tr><td>22.10 Selection</td><td>Mixed early pools can raise the share of high-ability final winners.</td></tr>
-      </table>
-      <p class="small">These are verbal results: know the mechanism in one sentence each. No algebra needed.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 24. SELECTION ============ -->
-<section class="slide" data-title="Who wants to compete?">
-  <div class="kicker">Part 4 · Selection <span class="tag book">Kuhn ch. 23, Results 23.1–23.4</span></div>
-  <h1>Who chooses to enter a tournament?</h1>
-  <div class="cols">
-    <div>
-      <h2>Theory (Result 23.1)</h2>
-      <p>Competitive pay attracts people who:</p>
-      <ul>
-        <li>think they're <b>more able</b> than their rivals (including the overconfident);</li>
-        <li><b>enjoy</b> competition, or <b>perform better</b> under it;</li>
-        <li>and, ambiguously, are <b>risk-averse</b>. Rank pay adds the rival's luck as a risk, but insures against common shocks. Risk aversion is more likely to <em>raise</em> entry when common shocks are big.</li>
-      </ul>
-      <div class="box key"><b>Selection vs incentives.</b> When a firm switches to tournament pay and output rises, part of the rise may be <em>who</em> now works there (better or more competitive people sort in), not <em>how hard</em> people work. To separate them you need random assignment or the same people before and after. Same logic as Safelite (Kuhn ch. 8) and the exams' empirical questions.</div>
-    </div>
-    <div>
-      <h2>Evidence (Results 23.2–23.4)</h2>
-      <ul>
-        <li>People who rate their own relative ability highly are more likely to enter; risk aversion deters entry (23.2).</li>
-        <li><b>Niederle & Vesterlund (2007):</b> men chose the tournament far more often than women, even though men and women performed equally well and responded similarly to competition. Confidence and taste for competing explain the gap (23.3).</li>
-        <li>Accurate feedback on relative performance can close the gap, and in some societies the gap reverses (Gneezy et al. 2009) (23.4).</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 25. DIVIDER PART 5 ============ -->
-<section class="slide divider" data-title="Part 5: the exam model">
-  <div class="kicker">Part 5 · Oct 2025 final, Question 3 · 10 points</div>
-  <h1>The exam model: a two-period promotion with pride</h1>
-  <p class="lead">Dur's exam version differs from Kuhn's: two periods, a promotion raise $Z$, a non-monetary "pride" bonus $P$, effort cost $\theta e^2/2$, and output sold at price $R$. The <em>logic</em> is identical: probability slope × prize = marginal cost, then participation, then the firm's optimum.</p>
-</section>
-
-<!-- ============ 26. EXAM SETUP ============ -->
-<section class="slide" data-title="Exam setup">
-  <div class="kicker">Part 5 · Setup <span class="tag exam">Exam F25 Q3</span></div>
-  <h1>The setup</h1>
-  <div class="cols wide-right">
-    <div>
-      <ul>
-        <li>One firm, two workers, two periods. <b>Period 1:</b> both earn $W$, choose effort $e_i$, produce. <b>Period 2:</b> one is promoted and earns $W + Z$, the other stays at $W$.</li>
-        <li>Promotion probability: $p_i = \tfrac12 + \pi\,(e_i - e_j)$.</li>
-        <li>Effort cost (period 1 only): $\theta e_i^2/2$.</li>
-        <li>The promoted worker also enjoys <b>pride</b> $P$, utility, not money.</li>
-        <li>Outside option: $V$ <b>per period</b>.</li>
-        <li>Each unit of effort makes one unit of output, sold at price $R$. No production in period 2.</li>
-      </ul>
-      <table>
-        <tr><th>Kuhn</th><th>Exam</th></tr>
-        <tr><td>$\alpha d$ (probability slope)</td><td>$\pi$</td></tr>
-        <tr><td>prize $S$</td><td>$Z + P$ (money + pride)</td></tr>
-        <tr><td>cost $E^2/2$</td><td>$\theta e^2/2$</td></tr>
-        <tr><td>$R$ = luck range</td><td>$R$ = <b>output price</b></td></tr>
-      </table>
-    </div>
-    <div class="fig">
-      <svg viewBox="0 0 520 300">
-        <line class="ax" x1="30" y1="150" x2="500" y2="150"/>
-        <rect class="nodeA" x="40" y="40" width="190" height="90" rx="10"/>
-        <text class="lbl" x="135" y="66" text-anchor="middle">Period 1</text>
-        <text x="135" y="90" text-anchor="middle">both paid W</text>
-        <text x="135" y="112" text-anchor="middle">effort eᵢ, cost θeᵢ²/2</text>
-        <rect class="nodeB" x="250" y="110" width="80" height="80" rx="40"/>
-        <text class="lbl" x="290" y="146" text-anchor="middle">promote</text>
-        <text x="290" y="166" text-anchor="middle">pᵢ</text>
-        <rect class="nodeA" x="350" y="20" width="160" height="100" rx="10"/>
-        <text class="lbl" x="430" y="46" text-anchor="middle">Promoted</text>
-        <text x="430" y="70" text-anchor="middle">W + Z</text>
-        <text x="430" y="94" text-anchor="middle">+ pride P</text>
-        <rect class="node" x="350" y="180" width="160" height="90" rx="10"/>
-        <text class="lbl" x="430" y="208" text-anchor="middle">Not promoted</text>
-        <text x="430" y="232" text-anchor="middle">W</text>
-        <path class="arrow" d="M230 100 L252 130"/>
-        <path class="arrow" d="M330 140 L350 90"/><path class="arrow" d="M330 160 L350 210"/>
-        <text x="135" y="200" text-anchor="middle">output 1 per unit effort,</text>
-        <text x="135" y="220" text-anchor="middle">sold at price R</text>
-        <text x="430" y="290" text-anchor="middle">Period 2: no effort, no output</text>
-      </svg>
-      <div class="cap">The firm pays 4 base salaries in total (2 workers × 2 periods) plus one raise $Z$. Pride is <b>not</b> paid by the firm.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 27. Q3a ============ -->
-<section class="slide" data-title="Q3a: effort">
-  <div class="kicker">Part 5 · Q3a <span class="tag exam">2 points</span></div>
-  <h1>Q3a: derive the worker's optimal effort</h1>
-  <ol class="derive big">
-    <li class="step"><span class="pts">1 pt</span>Expected utility over both periods: two base salaries for sure, plus the promotion prize (money + pride) with probability $p_i$, minus effort cost:
-      $$EU_i = 2W + \Big[\tfrac12 + \pi(e_i - e_j)\Big](Z+P) - \frac{\theta e_i^2}{2}$$</li>
-    <li class="step"><span class="pts">1 pt</span>Differentiate with respect to $e_i$ and set to zero:
-      $$\pi(Z+P) - \theta e_i = 0 \quad\Longrightarrow\quad e_i = \frac{\pi(Z+P)}{\theta}$$
-      <span class="why">Marginal benefit: one more unit of effort raises the promotion chance by $\pi$, and promotion is worth $Z+P$ to the worker. Marginal cost: $\theta e_i$.</span></li>
-  </ol>
-  <div class="box key step">Same structure as Kuhn's $E = \alpha d S$: <b>effort = (probability slope × prize) / cost parameter.</b> Pride works exactly like extra prize money from the worker's point of view.</div>
-  <div class="box warn step"><b>Traps:</b> the 2W enters utility but not the FOC. Don't forget $P$ in the prize. State the second-order condition ($-\theta < 0$) if you have time.</div>
-</section>
-
-<!-- ============ 28. Q3b ============ -->
-<section class="slide" data-title="Q3b: participation & wage">
-  <div class="kicker">Part 5 · Q3b <span class="tag exam">3 points</span></div>
-  <h1>Q3b: the lowest wage $W$ workers accept</h1>
-  <p class="lead">Show that $W = V - \tfrac14(Z+P) + \tfrac14\theta\Big(\tfrac{\pi(Z+P)}{\theta}\Big)^2$.</p>
-  <ol class="derive big">
-    <li class="step"><span class="pts">1 pt</span>Both workers choose the same effort (same FOC), so $e_i = e_j$ and
-      $$p_i = p_j = \tfrac12$$</li>
-    <li class="step"><span class="pts">1 pt</span>Expected utility from taking the job must equal the outside option over <b>both</b> periods, $2V$:
-      $$2W + \tfrac12(Z+P) - \tfrac12\theta e^2 = 2V$$</li>
-    <li class="step"><span class="pts">1 pt</span>Divide by 2 and substitute $e = \pi(Z+P)/\theta$:
-      $$W = V - \tfrac14(Z+P) + \tfrac14\theta e^2 = V - \tfrac14(Z+P) + \tfrac14\theta\Big(\tfrac{\pi(Z+P)}{\theta}\Big)^2$$</li>
-  </ol>
-  <div class="box warn step"><b>Most common error:</b> using $V$ instead of $2V$. The worker gives up the outside option in <em>both</em> periods.</div>
-</section>
-
-<!-- ============ 29. Q3c ============ -->
-<section class="slide" data-title="Q3c: two effects of pride">
-  <div class="kicker">Part 5 · Q3c <span class="tag exam">2 points · verbal</span></div>
-  <h1>Q3c: pride has two opposing effects on $W$</h1>
-  <div class="cols wide-right">
-    <div>
-      $$W = V \;\underbrace{-\;\tfrac14(Z+P)}_{\text{effect 1}} \;\underbrace{+\;\tfrac14\theta\Big(\tfrac{\pi(Z+P)}{\theta}\Big)^2}_{\text{effect 2}}$$
-      <div class="box key"><span class="pts">1 pt</span><b>Effect 1 (lowers W):</b> more pride makes promotion more valuable, so the job becomes more attractive and the firm can pay a lower wage.</div>
-      <div class="box key"><span class="pts">1 pt</span><b>Effect 2 (raises W):</b> more pride makes the worker work harder in period 1 to get promoted. That raises her effort cost, which makes the job less attractive, so the firm must pay more.</div>
-      <div class="box warn">The question says <b>"do not write math in words"</b>. "The second term increases in P" scores 0. Explain the <em>economic</em> channel: attractiveness via promotion utility versus via effort cost.</div>
-    </div>
-    <div class="fig">
-      <svg viewBox="0 0 520 300" id="figPride"></svg>
-      <div class="ctrl">
-        <label for="prZ">Raise $Z$ (held fixed)</label><input id="prZ" type="range" min="0" max="40" step="1" value="10"><output id="prZO"></output>
-        <label for="prPi">Probability slope $\pi$</label><input id="prPi" type="range" min="0.05" max="0.3" step="0.01" value="0.1"><output id="prPiO"></output>
-      </div>
-      <div class="readout" id="prRead"></div>
-      <div class="cap">Required wage $W$ as pride $P$ rises ($V=13$, $\theta=2$). Effect 1 is the falling straight line, effect 2 the rising curve. Their sum is U-shaped, which is why the answer is "may increase or decrease". <span class="tag ill">Illustration</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 30. Q3d ============ -->
-<section class="slide" data-title="Q3d: optimal raise Z">
-  <div class="kicker">Part 5 · Q3d <span class="tag exam">3 points</span></div>
-  <h1>Q3d: the profit-maximising promotion raise $Z$</h1>
-  <div class="cols wide-right">
-    <div>
-      <ol class="derive">
-        <li class="step"><span class="pts">1 pt</span>Profit: revenue from two workers' period-1 output, minus 4 base salaries and one raise:
-          $$\Pi = 2Re - Z - 4W$$</li>
-        <li class="step"><span class="pts">1 pt</span>Substitute $e$ (3a) and $W$ (3b). Note $-4W = -4V + (Z+P) - \theta e^2$:
-          $$\Pi = 2R\tfrac{\pi(Z+P)}{\theta} - Z - 4V + Z + P - \theta\Big(\tfrac{\pi(Z+P)}{\theta}\Big)^2$$
-          <span class="why">The $-Z$ and $+Z$ cancel: the firm gets the raise "back" through a lower base wage.</span></li>
-        <li class="step"><span class="pts">1 pt</span>Differentiate with respect to $Z$:
-          $$\frac{2R\pi}{\theta} - \frac{2\pi^2(Z+P)}{\theta} = 0 \;\Longrightarrow\; Z+P = \frac{R}{\pi} \;\Longrightarrow\; \boxed{Z^* = \frac{R}{\pi} - P}$$</li>
-      </ol>
-    </div>
-    <div class="fig">
-      <svg viewBox="0 0 520 300" id="figProfit"></svg>
-      <div class="ctrl">
-        <label for="zP">Pride $P$</label><input id="zP" type="range" min="0" max="50" step="1" value="40"><output id="zPO"></output>
-        <label for="zR">Price $R$</label><input id="zR" type="range" min="2" max="10" step="0.5" value="6"><output id="zRO"></output>
-      </div>
-      <div class="readout" id="zRead"></div>
-      <div class="cap">Profit as a function of $Z$ ($\pi=0.1$, $\theta=2$, $V=13$). The peak sits at $Z = R/\pi - P$. Raise $P$: the whole curve slides left one-for-one.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 31. INSIGHTS ============ -->
-<section class="slide" data-title="What the solution means">
-  <div class="kicker">Part 5 · Interpretation</div>
-  <h1>What the solution tells you (worth a sentence on the exam)</h1>
-  <div class="cols">
-    <div>
-      <h2>1 · The firm implements efficient effort</h2>
-      <p>At $Z^*$: $e^* = \pi(Z+P)/\theta = \pi\cdot\frac{R/\pi}{\theta} = \frac{R}{\theta}$.</p>
-      <p>Efficient effort maximises total surplus $2Re - 2\cdot\theta e^2/2$ (pay is a transfer), so $R = \theta e$, giving $e = R/\theta$. Same thing.</p>
-      <div class="box key">Like Kuhn's $S^* = 1/\alpha$: the firm is the residual claimant, the participation constraint binds, so it wants the pie as big as possible, and sets the total prize $Z+P$ so that effort is efficient.</div>
-    </div>
-    <div>
-      <h2>2 · Pride substitutes for cash, one-for-one</h2>
-      <p>$\partial Z^*/\partial P = -1$: each unit of pride replaces one unit of raise, and effort is unchanged.</p>
-      <p>Profit at the optimum: $\Pi^* = \frac{R^2}{\theta} - 4V + P$, so pride is pure profit for the firm. It motivates like money but costs nothing.</p>
-      <div class="box warn"><b>Check feasibility:</b> if $P > R/\pi$, the formula gives $Z^* < 0$, a "promotion penalty". If the firm can't set $Z<0$, the constraint $Z \ge 0$ binds and effort exceeds the efficient level. Also check $p_i \in [0,1]$ and that the firm wants to operate at all ($\Pi^*\ge 0$).</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 32. PRACTICE ============ -->
-<section class="slide" data-title="Practice problems">
-  <div class="kicker">Practice · try before opening</div>
-  <h1>Practice problems</h1>
-  <div class="cols">
-    <div>
-      <div class="box"><h3>P1 · Kuhn model, numbers <span class="tag ill">constructed</span></h3>
-        Luck range $R=20$, $d=3$, outside option $\bar U = 4$, cost $E^2/2$. Find efficient effort, the optimal $S$ and $a$, and profit per worker.
-        <details><summary>Solution</summary>
-          $\alpha = 1/20 = 0.05$. Efficient $E^* = d = 3$. $S = 1/\alpha = 20$; check $E = 0.05\cdot3\cdot20 = 3$ ✓.<br>
-          $a = \bar U - S/2 + d^2/2 = 4 - 10 + 4.5 = -1.5$ (an entry fee!).<br>
-          Profit per worker $= dE - (a + S/2) = 9 - 8.5 = 0.5$. Check: surplus $9 - 4.5 = 4.5$ minus $\bar U = 4$ ✓.</details></div>
-      <div class="box"><h3>P2 · Exam model, numbers <span class="tag ill">constructed</span></h3>
-        $R=10$, $\pi=0.2$, $\theta=2$, $V=5$, $P=0$. Find $Z^*$, $e^*$, $W$, profit. Then redo with $P=10$.
-        <details><summary>Solution</summary>
-          $Z^* = R/\pi - P = 50$; $e = \pi Z/\theta = 0.2\cdot50/2 = 5 = R/\theta$ ✓.<br>
-          $W = V - Z/4 + \theta e^2/4 = 5 - 12.5 + 12.5 = 5$.<br>
-          $\Pi = 2Re - 4W - Z = 100 - 20 - 50 = 30$ $(= R^2/\theta - 4V)$.<br>
-          With $P=10$: $Z^*=40$, $e = 0.2\cdot50/2 = 5$ (unchanged), $W = 5$ (since $Z+P$ unchanged), $\Pi = 100 - 20 - 40 = 40$. Pride raised profit by exactly $P$.</details></div>
-    </div>
-    <div>
-      <div class="box"><h3>P3 · Verbal (2 sentences)</h3>Why must the prize be larger when performance is measured less precisely?
-        <details><summary>Model answer</summary>When luck matters more, an extra unit of effort raises the chance of winning by less. To keep the marginal benefit of effort equal to its marginal cost at the efficient level, the firm has to raise the value of winning.</details></div>
-      <div class="box"><h3>P4 · Verbal (2 sentences)</h3>Why can introducing a bonus for the best worker lower total output?
-        <details><summary>Model answer</summary>The bonus rewards relative performance, so workers can also win by lowering colleagues' measured output (sabotage) or by refusing to help them. Workers who expect to be sabotaged also gain less from effort, so they work less.</details></div>
-      <div class="box"><h3>P5 · Verbal (2 sentences)</h3>In the exam model, why does $Z^*$ fall one-for-one with $P$?
-        <details><summary>Model answer</summary>Workers' effort depends only on the total value of promotion, $Z+P$, and the firm wants that total at the level that makes effort efficient. Pride already provides part of that value for free, so the firm needs less cash to reach it.</details></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 33. CHECKLIST ============ -->
-<section class="slide" data-title="Formula sheet & checklist">
-  <div class="kicker">Summary</div>
-  <h1>Formula sheet and exam checklist</h1>
-  <div class="cols">
-    <div>
-      <table>
-        <tr><th>Object</th><th>Kuhn (ch. 20)</th><th>Exam (F25)</th></tr>
-        <tr><td>Win probability</td><td>$\tfrac12 + \alpha d(E_1-E_2)$</td><td>$\tfrac12 + \pi(e_i-e_j)$</td></tr>
-        <tr><td>Expected utility</td><td>$a + pS - E^2/2$</td><td>$2W + p(Z+P) - \theta e^2/2$</td></tr>
-        <tr><td>Optimal effort</td><td>$E = \alpha dS$</td><td>$e = \pi(Z+P)/\theta$</td></tr>
-        <tr><td>Efficient effort</td><td>$E^* = d$</td><td>$e^* = R/\theta$</td></tr>
-        <tr><td>Optimal prize</td><td>$S^* = 1/\alpha = R$</td><td>$Z^* = R/\pi - P$</td></tr>
-        <tr><td>Participation</td><td>$a + S/2 - E^2/2 = \bar U$</td><td>$2W + (Z+P)/2 - \theta e^2/2 = 2V$</td></tr>
-        <tr><td>Profit</td><td>$dE - a - S/2$ per worker</td><td>$2Re - 4W - Z$</td></tr>
-      </table>
-    </div>
-    <div>
-      <div class="box key"><h3>The recipe (any tournament question)</h3>
-        <ol style="margin:0;padding-left:20px">
-          <li>Write expected utility: base pay + $p$ × prize − effort cost.</li>
-          <li>FOC in own effort: slope of $p$ × prize = marginal cost.</li>
-          <li>Symmetry ⇒ equal efforts ⇒ $p = \tfrac12$ (say it!).</li>
-          <li>Participation constraint binds ⇒ base pay.</li>
-          <li>Profit = revenue − all wages; substitute; FOC in the prize.</li>
-          <li>Interpret: efficient effort? which channel? feasibility?</li>
-        </ol></div>
-      <div class="box warn"><h3>Traps</h3>
-        Outside option over <b>all</b> periods (2V) · count salaries correctly (4W) · pride is not a cash cost · $R$ means different things in Kuhn and the exam · "two effects" = two distinct economic channels, no math in words · probabilities must stay in $[0,1]$.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 34. SOURCES ============ -->
-<section class="slide" data-title="Sources">
-  <div class="kicker">Sources</div>
-  <h1>Sources and what to read</h1>
-  <table>
-    <tr><th>Part</th><th>Source</th><th>Priority</th></tr>
-    <tr><td>Basic model, efficiency, design, equivalence</td><td>Kuhn 20.1–20.6, pdf p. 364–375</td><td><b>Must read</b>: the derivations</td></tr>
-    <tr><td>Extensions, common shocks, broilers</td><td>Kuhn 20.7–20.9, pdf p. 375–389</td><td>Skim: know Results 20.6–20.11 in one sentence</td></tr>
-    <tr><td>Sabotage, collusion, risk-taking</td><td>Kuhn ch. 21, pdf p. 390–410</td><td>Skim: mechanisms + the three studies</td></tr>
-    <tr><td>Uneven contests, fixes, ladders</td><td>Kuhn ch. 22, pdf p. 411–435</td><td>Read 22.1–22.3; skim 22.4</td></tr>
-    <tr><td>Selection into tournaments</td><td>Kuhn ch. 23, pdf p. 436–447</td><td>Skim</td></tr>
-    <tr><td>Exam model</td><td>Oct 2025 final Q3 (with solutions), pdf p. 7–8</td><td><b>Must do</b>, cold, twice</td></tr>
-  </table>
-  <p class="small">Labelled <span class="tag ill">Illustration</span> items (sabotage algebra, collusion payoff table, normal-noise graphs, pride/profit plots, practice numbers) are constructed for teaching. They follow the book's logic but are not formulas from Kuhn or the exam. Check Dur's lecture slides (7 Oct) for his notation and emphasis.</p>
-</section>
-
-</main>
-
-<nav class="bar" aria-label="Slide navigation">
-  <button id="prev" aria-label="Previous">← Back</button>
-  <button id="next" class="primary" aria-label="Next">Next →</button>
-  <span class="pos" id="pos"></span>
-  <span class="grow"></span>
-  <select id="jump" aria-label="Jump to slide"></select>
-  <button id="mode" title="Toggle notes view (N)">Notes view</button>
-  <button id="theme" title="Toggle light/dark">◐</button>
-</nav>
-
-<script>
-(function(){
-  const slides=[...document.querySelectorAll('.slide')];
-  let cur=0;
-  const jump=document.getElementById('jump');
-  slides.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=(i+1)+'. '+(s.dataset.title||'');jump.appendChild(o);});
-  function steps(s){return [...s.querySelectorAll('.step')];}
-  function show(i,fromBack){
-    cur=Math.max(0,Math.min(slides.length-1,i));
-    slides.forEach((s,j)=>s.classList.toggle('active',j===cur));
-    steps(slides[cur]).forEach(st=>st.classList.toggle('hidden',!fromBack));
-    document.getElementById('pos').textContent=(cur+1)+' / '+slides.length;
-    jump.value=cur;
-    document.getElementById('progress').style.width=((cur+1)/slides.length*100)+'%';
-    try{history.replaceState(null,'','#'+(cur+1));}catch(e){}
-    window.scrollTo(0,0);
+<hyperframes-slideshow tabindex="0" notes-storage-key="tournaments-in-depth" style="display:block;position:relative;width:100vw;height:100vh">
+  <hyperframes-player interactive style="position:absolute;inset:0" src="composition/index.html"></hyperframes-player>
+  <!-- DUPLICATED ISLAND: generated by build/build.mjs from the same source as composition/index.html -->
+  <script type="application/hyperframes-slideshow+json">
+{
+ "slides": [
+  {
+   "sceneId": "title",
+   "notes": "Self-study deck. Arrow keys step through every reveal; sliders and the 3D surface are live."
+  },
+  {
+   "sceneId": "why-exam",
+   "notes": "F25 Q3, Dur's two-period version of the model. Part 5 solves it point by point."
+  },
+  {
+   "sceneId": "p1",
+   "notes": "The basic model in five steps"
+  },
+  {
+   "sceneId": "what",
+   "notes": "Two defining features: prizes fixed in advance; only ordinal information needed.",
+   "fragments": [
+    31,
+    31.5,
+    32,
+    32.5,
+    33
+   ]
+  },
+  {
+   "sceneId": "puzzle",
+   "notes": "Classic Lazear–Rosen insight. The prize need not equal anyone's marginal product.",
+   "fragments": [
+    41
+   ]
+  },
+  {
+   "sceneId": "setup",
+   "notes": "Symmetric contest: same d, same cost. Risk neutral."
+  },
+  {
+   "sceneId": "who-wins",
+   "notes": "Everything runs through the win probability.",
+   "fragments": [
+    61,
+    61.5,
+    62
+   ]
+  },
+  {
+   "sceneId": "uniform",
+   "notes": "Probability = rectangle area to the left of the threshold.",
+   "fragments": [
+    71,
+    71.5
+   ]
+  },
+  {
+   "sceneId": "surface",
+   "notes": "Three.js surface of p1(E1,E2). Contour lines run parallel to the diagonal E1 = E2.",
+   "fragments": [
+    81,
+    81.5,
+    82,
+    82.5
+   ]
+  },
+  {
+   "sceneId": "reading",
+   "notes": "The marginal effect of effort on p, alpha*d, is what drives effort.",
+   "fragments": [
+    91
+   ]
+  },
+  {
+   "sceneId": "prob-own",
+   "notes": "Kinks A and B are where the uniform support ends.",
+   "fragments": [
+    101,
+    101.5,
+    102
+   ]
+  },
+  {
+   "sceneId": "foc",
+   "notes": "Second-order condition -1 < 0.",
+   "fragments": [
+    111,
+    111.5,
+    112
+   ]
+  },
+  {
+   "sceneId": "mbmc",
+   "notes": "Move S until the chosen effort hits the efficient level E* = d.",
+   "fragments": [
+    121
+   ]
+  },
+  {
+   "sceneId": "dominant",
+   "notes": "With uniform luck the rival's effort drops out of the FOC. With other distributions, it does not.",
+   "fragments": [
+    131
+   ]
+  },
+  {
+   "sceneId": "equilibrium",
+   "notes": "State p = 1/2 explicitly on the exam: it was worth a point.",
+   "fragments": [
+    141,
+    141.5,
+    142,
+    142.5
+   ]
+  },
+  {
+   "sceneId": "efficient",
+   "notes": "Wages are transfers; they cancel in total surplus.",
+   "fragments": [
+    151,
+    151.5
+   ]
+  },
+  {
+   "sceneId": "design-S",
+   "notes": "Noisier measurement needs a bigger prize.",
+   "fragments": [
+    161,
+    161.5,
+    162
+   ]
+  },
+  {
+   "sceneId": "design-a",
+   "notes": "a can be negative: an entry fee.",
+   "fragments": [
+    171,
+    171.5,
+    172
+   ]
+  },
+  {
+   "sceneId": "example",
+   "notes": "alpha = 0.1, d = 4; base pay a = 9 corresponds to outside utility 6.",
+   "fragments": [
+    181,
+    181.5,
+    182,
+    182.5,
+    183
+   ]
+  },
+  {
+   "sceneId": "p2",
+   "notes": "If they are equivalent, why do firms use tournaments?"
+  },
+  {
+   "sceneId": "advantages",
+   "notes": "20.11 lists experimentation, no ratchet, no temptation to misreport.",
+   "fragments": [
+    201,
+    201.5,
+    202,
+    202.5
+   ]
+  },
+  {
+   "sceneId": "common",
+   "notes": "Broiler growers: same chicks, same feed, paid relative to each other.",
+   "fragments": [
+    211,
+    211.5,
+    212
+   ]
+  },
+  {
+   "sceneId": "many",
+   "notes": "With independent uniform luck the two effects exactly cancel (List et al. 2014).",
+   "fragments": [
+    221,
+    221.5,
+    222
+   ]
+  },
+  {
+   "sceneId": "feedback",
+   "notes": "Exam style: name both channels, direction of each, net effect.",
+   "fragments": [
+    231,
+    231.5,
+    232
+   ]
+  },
+  {
+   "sceneId": "p3",
+   "notes": "What goes wrong: anything that improves your rank pays"
+  },
+  {
+   "sceneId": "sabotage",
+   "notes": "Illustrative model consistent with Kuhn 21.1: sabotage s cuts the rival's measured output one-for-one.",
+   "fragments": [
+    251,
+    251.5,
+    252,
+    252.5
+   ]
+  },
+  {
+   "sceneId": "sabotage-ev",
+   "notes": "Carpenter, Matthews & Schirm (2010): envelope stuffing with peer grading.",
+   "fragments": [
+    261,
+    261.5,
+    262,
+    262.5
+   ]
+  },
+  {
+   "sceneId": "collusion",
+   "notes": "Payoffs from Kuhn's example a=9, S=10, alpha=0.1, d=4. Deviation: effort 1.25 already wins for sure against a shirker.",
+   "fragments": [
+    271,
+    271.5
+   ]
+  },
+  {
+   "sceneId": "collusion-ev",
+   "notes": "Bandiera, Barankay & Rasul (2005). Productivity rose 59% when the farm returned to fixed piece rates.",
+   "fragments": [
+    281,
+    281.5,
+    282,
+    282.5
+   ]
+  },
+  {
+   "sceneId": "risk",
+   "notes": "Brown, Harlow & Starks (1996) mutual funds.",
+   "fragments": [
+    291,
+    291.5,
+    292
+   ]
+  },
+  {
+   "sceneId": "p4",
+   "notes": "Uneven contests, and who chooses to compete"
+  },
+  {
+   "sceneId": "asym",
+   "notes": "Live version of Kuhn Figs 22.2–22.4.",
+   "fragments": [
+    311,
+    311.5,
+    312,
+    312.5
+   ]
+  },
+  {
+   "sceneId": "tiger",
+   "notes": "The extracted text of Result 22.2 reads the other way round; the surrounding discussion and Brown (2011) confirm worse with Woods present.",
+   "fragments": [
+    321
+   ]
+  },
+  {
+   "sceneId": "fixes",
+   "notes": "Handicap: a less able player can win with a worse performance.",
+   "fragments": [
+    331,
+    331.5,
+    332
+   ]
+  },
+  {
+   "sceneId": "fair",
+   "notes": "Incentive rule vs selection rule can be separated.",
+   "fragments": [
+    341,
+    341.5,
+    342
+   ]
+  },
+  {
+   "sceneId": "ladder",
+   "notes": "Skewed executive pay as a tournament prize.",
+   "fragments": [
+    351,
+    351.5,
+    352
+   ]
+  },
+  {
+   "sceneId": "ladder-results",
+   "notes": "Verbal results; no algebra needed."
+  },
+  {
+   "sceneId": "entry",
+   "notes": "Risk aversion is ambiguous in theory; deters entry in experiments.",
+   "fragments": [
+    371,
+    371.5,
+    372
+   ]
+  },
+  {
+   "sceneId": "gender",
+   "notes": "Same logic as Safelite and the empirical-methods exam questions.",
+   "fragments": [
+    381,
+    381.5,
+    382
+   ]
+  },
+  {
+   "sceneId": "p5",
+   "notes": "The exam model: a two-period promotion with pride"
+  },
+  {
+   "sceneId": "exam-setup",
+   "notes": "Firm pays 4 base salaries (2 workers × 2 periods) plus one raise Z. Pride is not paid by the firm.",
+   "fragments": [
+    401,
+    401.5,
+    402,
+    402.5
+   ]
+  },
+  {
+   "sceneId": "translate",
+   "notes": "R means different things!"
+  },
+  {
+   "sceneId": "q3a",
+   "notes": "Grading: 1 pt expected utility, 1 pt FOC.",
+   "fragments": [
+    421,
+    421.5,
+    422
+   ]
+  },
+  {
+   "sceneId": "q3b",
+   "notes": "Most common error: V instead of 2V.",
+   "fragments": [
+    431,
+    431.5,
+    432,
+    432.5
+   ]
+  },
+  {
+   "sceneId": "q3c",
+   "notes": "Grading: 1 pt per effect. \"No math in words\".",
+   "fragments": [
+    441,
+    441.5,
+    442
+   ]
+  },
+  {
+   "sceneId": "q3d",
+   "notes": "The −Z and +Z cancel: the raise is recouped through a lower base wage.",
+   "fragments": [
+    451,
+    451.5,
+    452
+   ]
+  },
+  {
+   "sceneId": "profit",
+   "notes": "pi = 0.1, theta = 2, V = 13.",
+   "fragments": [
+    461,
+    461.5,
+    462
+   ]
+  },
+  {
+   "sceneId": "insights",
+   "notes": "Worth a sentence on the exam.",
+   "fragments": [
+    471,
+    471.5,
+    472
+   ]
+  },
+  {
+   "sceneId": "pr1",
+   "notes": "Try before revealing.",
+   "fragments": [
+    481,
+    481.5,
+    482
+   ]
+  },
+  {
+   "sceneId": "pr2",
+   "notes": "Try before revealing.",
+   "fragments": [
+    491,
+    491.5,
+    492
+   ]
+  },
+  {
+   "sceneId": "pr3",
+   "notes": "Answers revealed one by one.",
+   "fragments": [
+    501,
+    501.5,
+    502
+   ]
+  },
+  {
+   "sceneId": "formulas",
+   "notes": "Memorise the right-hand column."
+  },
+  {
+   "sceneId": "recipe",
+   "notes": "Six steps plus the trap list.",
+   "fragments": [
+    521,
+    521.5,
+    522,
+    522.5,
+    523,
+    523.5
+   ]
+  },
+  {
+   "sceneId": "sources",
+   "notes": "Illustrations are constructed; check Dur's slides on 7 Oct for his notation."
   }
-  function next(){
-    if(document.body.classList.contains('article'))return;
-    const h=steps(slides[cur]).find(st=>st.classList.contains('hidden'));
-    if(h){h.classList.remove('hidden');return;}
-    if(cur<slides.length-1)show(cur+1);
-  }
-  function prev(){
-    if(document.body.classList.contains('article'))return;
-    const vis=steps(slides[cur]).filter(st=>!st.classList.contains('hidden'));
-    if(vis.length){vis[vis.length-1].classList.add('hidden');return;}
-    if(cur>0)show(cur-1,true);
-  }
-  function toggleMode(){
-    document.body.classList.toggle('article');
-    const a=document.body.classList.contains('article');
-    document.getElementById('mode').textContent=a?'Slide view':'Notes view';
-    try{localStorage.setItem('tournMode',a?'article':'slides');}catch(e){}
-    if(a){slides[cur].scrollIntoView();}else{show(cur);}
-  }
-  document.getElementById('next').onclick=next;
-  document.getElementById('prev').onclick=prev;
-  document.getElementById('mode').onclick=toggleMode;
-  jump.onchange=()=>{if(document.body.classList.contains('article'))slides[+jump.value].scrollIntoView();else show(+jump.value);};
-  document.getElementById('theme').onclick=()=>{
-    const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
-    r.dataset.theme=dark?'light':'dark';
-  };
-  document.addEventListener('keydown',e=>{
-    if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;
-    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();next();}
-    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev();}
-    else if(e.key==='n'||e.key==='N'){toggleMode();}
-  });
-  let start=parseInt((location.hash||'').slice(1),10);
-  let mode=null;try{mode=localStorage.getItem('tournMode');}catch(e){}
-  if(mode==='article'||(!mode&&window.innerWidth<760)){document.body.classList.add('article');document.getElementById('mode').textContent='Slide view';}
-  show(isNaN(start)?0:start-1);
-  if(document.body.classList.contains('article')&&!isNaN(start))setTimeout(()=>slides[cur].scrollIntoView(),50);
-})();
-
-/* ---------- tiny plotting helper ---------- */
-const NS='http://www.w3.org/2000/svg';
-function plot(svg,o){
-  const W=svg.viewBox.baseVal.width,H=svg.viewBox.baseVal.height;
-  const m={l:52,r:18,t:16,b:40};
-  const sx=x=>m.l+(x-o.x0)/(o.x1-o.x0)*(W-m.l-m.r);
-  const sy=y=>H-m.b-(y-o.y0)/(o.y1-o.y0)*(H-m.t-m.b);
-  svg.innerHTML='';
-  const el=(tag,attrs,txt)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!=null)e.textContent=txt;svg.appendChild(e);return e;};
-  (o.xt||[]).forEach(t=>{el('line',{class:'gr',x1:sx(t),x2:sx(t),y1:sy(o.y0),y2:sy(o.y1)});el('text',{x:sx(t),y:H-m.b+18,'text-anchor':'middle'},t);});
-  (o.yt||[]).forEach(t=>{el('line',{class:'gr',x1:sx(o.x0),x2:sx(o.x1),y1:sy(t),y2:sy(t)});el('text',{x:m.l-8,y:sy(t)+4,'text-anchor':'end'},t);});
-  el('line',{class:'ax',x1:sx(o.x0),x2:sx(o.x1),y1:sy(o.y0),y2:sy(o.y0)});
-  el('line',{class:'ax',x1:sx(o.x0),x2:sx(o.x0),y1:sy(o.y0),y2:sy(o.y1)});
-  if(o.xl)el('text',{x:(sx(o.x0)+sx(o.x1))/2,y:H-4,'text-anchor':'middle',class:'lbl'},o.xl);
-  if(o.yl)el('text',{x:14,y:(sy(o.y0)+sy(o.y1))/2,'text-anchor':'middle',class:'lbl',transform:`rotate(-90 14 ${(sy(o.y0)+sy(o.y1))/2})`},o.yl);
-  const api={sx,sy,el,
-    fn(f,cls,a=o.x0,b=o.x1,n=200){let d='';for(let i=0;i<=n;i++){const x=a+(b-a)*i/n,y=f(x);if(!isFinite(y))continue;const Y=Math.max(o.y0-1e9,Math.min(o.y1+1e9,y));d+=(d?'L':'M')+sx(x).toFixed(1)+','+sy(Y).toFixed(1);}return el('path',{d,class:cls});},
-    area(f,a,b,cls,base=o.y0,n=120){let d='M'+sx(a)+','+sy(base);for(let i=0;i<=n;i++){const x=a+(b-a)*i/n;d+='L'+sx(x).toFixed(1)+','+sy(f(x)).toFixed(1);}d+='L'+sx(b)+','+sy(base)+'Z';return el('path',{d,class:cls});},
-    line(x1,y1,x2,y2,cls){return el('line',{x1:sx(x1),y1:sy(y1),x2:sx(x2),y2:sy(y2),class:cls});},
-    dot(x,y,r=5,cls='dot'){return el('circle',{cx:sx(x),cy:sy(y),r,class:cls});},
-    text(x,y,t,anchor='start',cls='lbl',dy=0){return el('text',{x:sx(x),y:sy(y)+dy,'text-anchor':anchor,class:cls},t);}
-  };
-  svg.style.overflow='hidden';
-  return api;
+ ],
+ "slideSequences": []
 }
-function bind(ids,render){
-  ids.forEach(id=>{const e=document.getElementById(id);if(e)e.addEventListener('input',render);});
-  render();
-}
-const v=id=>{const e=document.getElementById(id);return e.type==='checkbox'?e.checked:parseFloat(e.value);};
-const out=(id,val)=>{const o=document.getElementById(id+'O');if(o)o.textContent=val;};
-const fmt=(x,d=2)=>(Math.round(x*10**d)/10**d).toString();
-function erf(x){const t=1/(1+0.3275911*Math.abs(x));const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);return x>=0?y:-y;}
-const Phi=z=>0.5*(1+erf(z/Math.SQRT2));
-const phi=z=>Math.exp(-z*z/2)/Math.sqrt(2*Math.PI);
-
-/* ---------- Uniform luck ---------- */
-bind(['uGap','uR'],()=>{
-  const g=v('uGap'),R=v('uR');out('uGap',fmt(g,1));out('uR',fmt(R,1));
-  const p=plot(document.getElementById('figUniform'),{x0:-11,x1:11,y0:0,y1:0.3,xt:[-10,-5,0,5,10],yt:[0.1,0.2,0.3],xl:'relative luck ε = ε₂ − ε₁',yl:'density'});
-  const h=1/R,lo=-R/2,hi=R/2,th=Math.max(lo,Math.min(hi,g));
-  p.area(()=>h,lo,th,'fillA');
-  p.line(lo,0,lo,h,'c1');p.line(lo,h,hi,h,'c1');p.line(hi,h,hi,0,'c1');
-  p.line(g,0,g,0.27,'c2 dash');p.text(g,0.275,'d(E₁−E₂) = '+fmt(g,1),'middle');
-  p.text(lo,h,'height 1/R = '+fmt(h,3),'start','lbl',-8);
-  const prob=Math.max(0,Math.min(1,0.5+g/R));
-  document.getElementById('uRead').innerHTML=`p₁ = ½ + (E₁−E₂)/R = ½ + ${fmt(g,1)}/${fmt(R,1)} = <b>${fmt(prob,3)}</b>`+(Math.abs(g)>R/2?' (outside the support: clipped)':'');
-});
-
-/* ---------- Probability vs own effort ---------- */
-bind(['pE2','pR','pN'],()=>{
-  const E2=v('pE2'),R=v('pR'),N=v('pN');out('pE2',fmt(E2,1));out('pR',fmt(R,1));
-  const p=plot(document.getElementById('figProb'),{x0:0,x1:12,y0:0,y1:1.05,xt:[0,2,4,6,8,10,12],yt:[0,0.5,1],xl:'own effort E₁',yl:'Pr(worker 1 wins)'});
-  const sd=R/Math.sqrt(12);
-  const f=N?(e=>Phi((e-E2)/sd)):(e=>Math.max(0,Math.min(1,0.5+(e-E2)/R)));
-  p.fn(f,'c1');
-  p.line(E2,0,E2,1.02,'c3 dash');p.text(E2,1.02,'E₁ = E₂ (p = ½)','middle','lbl',-4);
-  if(!N){const A=E2-R/2,B=E2+R/2;if(A>0){p.dot(A,0);p.text(A,0,'A','middle','lbl',-10);}if(B<12){p.dot(B,1);p.text(B,1,'B','middle','lbl',16);}}
-  p.dot(E2,0.5);
-});
-
-/* ---------- MB = MC ---------- */
-bind(['mS','mA','mD'],()=>{
-  const S=v('mS'),a=v('mA'),d=v('mD');out('mS',fmt(S,1));out('mA',fmt(a,2));out('mD',fmt(d,1));
-  const p=plot(document.getElementById('figMB'),{x0:0,x1:10,y0:0,y1:10,xt:[0,2,4,6,8,10],yt:[0,2,4,6,8,10],xl:'effort E',yl:'value per unit of effort'});
-  const mb=a*d*S;
-  p.fn(()=>mb,'c2');p.fn(x=>x,'c1');
-  p.text(9.8,Math.min(9.6,mb)+0.3,'MB = αdS = '+fmt(mb,2),'end');
-  p.text(8.6,9.3,'MC = E','end');
-  p.line(d,0,d,10,'c3 dash');p.text(d,9.6,'efficient E* = d','middle','lbl',-2);
-  if(mb<=10){p.line(mb,0,mb,mb,'c4 dash');p.dot(mb,mb,6);}
-  const Sstar=1/a;
-  document.getElementById('mRead').innerHTML=`Chosen effort E = αdS = <b>${fmt(mb,2)}</b> · efficient E* = ${fmt(d,1)} · prize needed for efficiency S* = 1/α = <b>${fmt(Sstar,1)}</b>`+(Math.abs(mb-d)<0.05?' ✓ efficient':'');
-});
-
-/* ---------- Total surplus ---------- */
-bind(['tD','tE'],()=>{
-  const d=v('tD'),E=v('tE');out('tD',fmt(d,1));out('tE',fmt(E,1));
-  const p=plot(document.getElementById('figTS'),{x0:0,x1:10,y0:0,y1:20,xt:[0,2,4,6,8,10],yt:[0,5,10,15,20],xl:'effort E',yl:'surplus dE − E²/2'});
-  const f=x=>d*x-x*x/2;
-  p.fn(f,'c1',0,Math.min(10,2*d));
-  p.area(()=>d*d/2,Math.min(E,d),Math.max(E,d),'fillB',undefined);
-  p.fn(()=>d*d/2,'c3 dash');
-  p.line(d,0,d,d*d/2,'c3 dash');p.dot(d,d*d/2,6);p.text(d,d*d/2,'max at E = d','middle','lbl',-10);
-  p.dot(E,Math.max(0,f(E)),6,'dot');
-  document.getElementById('tRead').innerHTML=`surplus at E = ${fmt(E,1)}: <b>${fmt(f(E),2)}</b> · maximum ${fmt(d*d/2,2)} · loss <b>${fmt(d*d/2-f(E),2)}</b> = (E−d)²/2`;
-});
-
-/* ---------- Common shock ---------- */
-bind(['cC'],()=>{
-  const c=v('cC');out('cC',fmt(c,1));
-  const svg=document.getElementById('figCommon');
-  const p=plot(svg,{x0:0,x1:4,y0:-4,y1:16,xt:[],yt:[-4,0,4,8,12,16],yl:'measured output'});
-  const Q1=6+c,Q2=4+c;
-  const bar=(x,y,cls,lab)=>{const top=Math.max(y,0),bot=Math.min(y,0);p.el('rect',{x:p.sx(x-0.35),y:p.sy(top),width:p.sx(x+0.35)-p.sx(x-0.35),height:Math.max(1,p.sy(bot)-p.sy(top)),class:cls,rx:4});p.text(x,y,lab+' = '+fmt(y,1),'middle','lbl',y>=0?-8:18);};
-  bar(1,Q1,'nodeA','Q₁');bar(2.2,Q2,'nodeB','Q₂');
-  p.line(0,0,4,0,'ax');
-  p.line(3.2,Q2,3.2,Q1,'c4');p.text(3.3,(Q1+Q2)/2,'gap = 2','start');
-  document.getElementById('cRead').innerHTML=`Worker 1 still ahead by <b>2</b> → tournament pay unchanged · piece-rate pay (a + bQ₁) changes by <b>${c>=0?'+':''}${fmt(c,1)}</b>`;
-});
-
-/* ---------- Risk-taking ---------- */
-bind(['rGap','rSig'],()=>{
-  const g=v('rGap'),s=v('rSig');out('rGap',fmt(g,1));out('rSig',fmt(s,1));
-  const p=plot(document.getElementById('figRisk'),{x0:0.5,x1:6,y0:0,y1:1,xt:[1,2,3,4,5,6],yt:[0,0.25,0.5,0.75,1],xl:'riskiness σ',yl:'Pr(win)'});
-  p.fn(x=>Phi(g/x),'c1');p.fn(()=>0.5,'c3 dash');
-  p.dot(s,Phi(g/s),6);
-  const slope=-phi(g/s)*g/(s*s);
-  document.getElementById('rRead').innerHTML=`Pr(win) = Φ(${fmt(g,1)}/${fmt(s,1)}) = <b>${fmt(Phi(g/s),3)}</b> · more risk ${slope>0.0005?'<b>helps</b> (behind)':slope<-0.0005?'<b>hurts</b> (ahead)':'does nothing (tied)'}`;
-});
-
-/* ---------- Asymmetric ---------- */
-bind(['aGap'],()=>{
-  const gap=v('aGap');out('aGap',fmt(gap,1));
-  const E2=5,sd=1.6,Emax=10;
-  const p=plot(document.getElementById('figAsym'),{x0:0,x1:Emax,y0:0,y1:1.05,xt:[0,2,4,6,8,10],yt:[0,0.5,1],xl:'your effort E₁ (0 to Emax)',yl:'Pr(you win)'});
-  const sym=e=>Phi((e-E2)/sd), f=e=>Phi((e-E2-gap)/sd);
-  p.fn(sym,'c3 dash');p.fn(f,'c1');
-  const eopt=Math.max(0,Math.min(Emax,E2+gap)); // where slope is steepest within feasible range
-  const e0=E2; const sl=phi((e0-E2-gap)/sd)/sd;
-  p.line(e0-1.5,f(e0)-1.5*sl,e0+1.5,f(e0)+1.5*sl,'c2');p.dot(e0,f(e0),6);
-  const symSl=phi(0)/sd;
-  document.getElementById('aRead').innerHTML=`At equal effort your win chance is <b>${fmt(f(e0),3)}</b>; marginal win chance per unit of effort <b>${fmt(sl,3)}</b> vs <b>${fmt(symSl,3)}</b> in an even contest (${fmt(100*sl/symSl,0)}%).`;
-});
-
-/* ---------- Exam: pride and W ---------- */
-bind(['prZ','prPi'],()=>{
-  const Z=v('prZ'),pi=v('prPi'),V=13,th=2;out('prZ',fmt(Z,0));out('prPi',fmt(pi,2));
-  const W=P=>V-(Z+P)/4+th/4*Math.pow(pi*(Z+P)/th,2);
-  const p=plot(document.getElementById('figPride'),{x0:0,x1:100,y0:-20,y1:40,xt:[0,20,40,60,80,100],yt:[-20,0,20,40],xl:'pride P',yl:'required wage W'});
-  p.fn(P=>V-(Z+P)/4,'c3 dash');p.fn(P=>V+th/4*Math.pow(pi*(Z+P)/th,2),'c2 dash');p.fn(W,'c1');
-  const Amin=th/(2*pi*pi),Pmin=Amin-Z;
-  if(Pmin>0&&Pmin<100){p.dot(Pmin,W(Pmin),6);p.text(Pmin,W(Pmin),'min','middle','lbl',18);}
-  p.text(98,V-(Z+98)/4,'V − (Z+P)/4','end','lbl',16);
-  document.getElementById('prRead').innerHTML=`W falls with P while Z+P < θ/(2π²) = ${fmt(Amin,1)} (effect 1 dominates), then rises (effect 2 dominates).`;
-});
-
-/* ---------- Exam: profit in Z ---------- */
-bind(['zP','zR'],()=>{
-  const P=v('zP'),R=v('zR'),pi=0.1,th=2,V=13;out('zP',fmt(P,0));out('zR',fmt(R,1));
-  const prof=Z=>{const A=Z+P,e=pi*A/th,W=V-A/4+th*e*e/4;return 2*R*e-4*W-Z;};
-  const Zs=R/pi-P,top=prof(Zs),y1=Math.ceil((top+12)/10)*10,y0=y1-60;
-  const yt=[0,1,2,3,4,5,6].map(k=>y0+10*k);
-  const p=plot(document.getElementById('figProfit'),{x0:-40,x1:100,y0,y1,xt:[-40,0,40,80],yt,xl:'promotion raise Z',yl:'profit Π'});
-  p.fn(prof,'c1');p.line(0,y0,0,y1,'ax');
-  p.line(Zs,y0,Zs,prof(Zs),'c2 dash');p.dot(Zs,prof(Zs),6);
-  p.text(Zs,prof(Zs),'Z* = R/π − P = '+fmt(Zs,1),'middle','lbl',-10);
-  const e=pi*(Zs+P)/th;
-  document.getElementById('zRead').innerHTML=`Z* = ${fmt(R,1)}/0.1 − ${fmt(P,0)} = <b>${fmt(Zs,1)}</b> · effort e* = R/θ = <b>${fmt(e,2)}</b> · profit Π* = R²/θ − 4V + P = <b>${fmt(R*R/th-4*V+P,1)}</b>`+(Zs<0?' · ⚠ Z* < 0: if raises must be ≥ 0, the constraint binds':'');
-});
-
-/* ---------- KaTeX ---------- */
-window.addEventListener('load',()=>{
-  if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}
-});
-</script>
+  </script>
+</hyperframes-slideshow>
+<script>window.addEventListener('load',function(){var s=document.querySelector('hyperframes-slideshow');if(s)s.focus();});</script>
 </body>
 </html>
