@@ -2,6 +2,8 @@
 
 A 54-slide HyperFrames slideshow: step-by-step derivations, live diagrams, a 3D win-probability surface, and the Oct 2025 exam question solved point by point.
 
+**Topic 8 tutorial:** [original exercises and answers](<../../Exercises and answers/Topic 8 of Personnel Economics Exercises and Answers.pdf>) · [readiness checklist and fully worked companion guide](<../../Exercises and answers/Topic 8 - tutorial readiness and worked guide.md>). The companion covers the extra payoff-matrix, outsider-promotion, relative-income, and tax-kink techniques needed for Exercises8.1–8.4, and flags omissions in the supplied answers.
+
 ## Open it
 - **Easiest, on any PC or laptop:** double-click **`Tournaments lecture - OPEN THIS.html`**. It is one self-contained file (fonts, maths, 3D and scripts all inside), opens in Chrome, Edge or any browser, and needs no server, no Node and no internet. Navigate with → / Space, ← and F for fullscreen, or with the capsule in the bottom-right.
 - **With presenter mode (notes + audience window):** on Windows double-click `Start lecture.cmd` (needs Node.js). It starts a local server and opens the deck in your browser.
