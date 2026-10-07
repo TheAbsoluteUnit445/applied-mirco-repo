@@ -1,0 +1,242 @@
+{
+  "date": "2026-10-07",
+  "framework": {
+    "discrimination": {
+      "ok": true,
+      "version": "0.8.140",
+      "scanSeconds": 10,
+      "errors": {
+        "lint": 0,
+        "runtime": 0,
+        "layout": 0,
+        "contrast": 0
+      },
+      "warnings": [
+        "nested_structure_needs_subcomposition"
+      ]
+    },
+    "politics": {
+      "ok": true,
+      "version": "0.8.140",
+      "scanSeconds": 10,
+      "errors": {
+        "lint": 0,
+        "runtime": 0,
+        "layout": 0,
+        "contrast": 0
+      },
+      "warnings": [
+        "nested_structure_needs_subcomposition"
+      ]
+    },
+    "taxation": {
+      "ok": true,
+      "version": "0.8.140",
+      "scanSeconds": 10,
+      "errors": {
+        "lint": 0,
+        "runtime": 0,
+        "layout": 0,
+        "contrast": 0
+      },
+      "warnings": [
+        "nested_structure_needs_subcomposition"
+      ]
+    },
+    "teams": {
+      "ok": true,
+      "version": "0.8.140",
+      "scanSeconds": 10,
+      "errors": {
+        "lint": 0,
+        "runtime": 0,
+        "layout": 0,
+        "contrast": 0
+      },
+      "warnings": [
+        "nested_structure_needs_subcomposition"
+      ]
+    },
+    "tournaments": {
+      "ok": true,
+      "version": "0.8.140",
+      "scanSeconds": 10,
+      "errors": {
+        "lint": 0,
+        "runtime": 0,
+        "layout": 0,
+        "contrast": 0
+      },
+      "warnings": [
+        "nested_structure_needs_subcomposition"
+      ]
+    }
+  },
+  "browserErrors": [],
+  "decks": [
+    {
+      "key": "taxation",
+      "slides": 15,
+      "slidesSwept": 15,
+      "layoutFindings": 0,
+      "graphs": [
+        {
+          "key": "tax-wedge",
+          "reset": true,
+          "keyboard": true,
+          "bounds": true
+        },
+        {
+          "key": "ramsey",
+          "reset": true,
+          "keyboard": true,
+          "bounds": true
+        },
+        {
+          "key": "tax-kink",
+          "reset": true,
+          "keyboard": true,
+          "bounds": true
+        }
+      ],
+      "revealNavigation": [
+        2,
+        4,
+        15
+      ],
+      "offlineSlides": 15
+    },
+    {
+      "key": "politics",
+      "slides": 13,
+      "slidesSwept": 13,
+      "layoutFindings": 0,
+      "graphs": [
+        {
+          "key": "median",
+          "reset": true,
+          "keyboard": true,
+          "bounds": true,
+          "dragging": true
+        }
+      ],
+      "revealNavigation": [
+        2,
+        4,
+        10.8
+      ],
+      "offlineSlides": 13
+    },
+    {
+      "key": "discrimination",
+      "slides": 12,
+      "slidesSwept": 12,
+      "layoutFindings": 0,
+      "graphs": [
+        {
+          "key": "prediction",
+          "reset": true,
+          "keyboard": true,
+          "bounds": true
+        }
+      ],
+      "revealNavigation": [
+        2,
+        4,
+        15
+      ],
+      "offlineSlides": 12
+    },
+    {
+      "key": "tournaments",
+      "slides": 21,
+      "slidesSwept": 21,
+      "layoutFindings": 0,
+      "graphs": [
+        {
+          "key": "probability",
+          "reset": true,
+          "keyboard": true,
+          "bounds": true,
+          "dragging": true
+        },
+        {
+          "key": "outsider",
+          "reset": true,
+          "keyboard": true,
+          "bounds": true
+        }
+      ],
+      "revealNavigation": [
+        2,
+        4,
+        15
+      ],
+      "offlineSlides": 21
+    },
+    {
+      "key": "teams",
+      "slides": 19,
+      "slidesSwept": 19,
+      "layoutFindings": 0,
+      "graphs": [
+        {
+          "key": "team-size",
+          "reset": true,
+          "keyboard": true,
+          "bounds": true
+        },
+        {
+          "key": "complements",
+          "reset": true,
+          "keyboard": true,
+          "bounds": true
+        }
+      ],
+      "revealNavigation": [
+        2,
+        4,
+        10.8
+      ],
+      "offlineSlides": 19
+    }
+  ],
+  "documents": [
+    {
+      "document": "01-optimal-taxation.html",
+      "math": 163,
+      "errors": 0,
+      "overflow": false
+    },
+    {
+      "document": "02-political-economy.html",
+      "math": 75,
+      "errors": 0,
+      "overflow": false
+    },
+    {
+      "document": "03-discrimination.html",
+      "math": 51,
+      "errors": 0,
+      "overflow": false
+    },
+    {
+      "document": "04-tournaments.html",
+      "math": 308,
+      "errors": 0,
+      "overflow": false
+    },
+    {
+      "document": "05-teams.html",
+      "math": 266,
+      "errors": 0,
+      "overflow": false
+    }
+  ],
+  "presenter": {
+    "audienceOpened": true,
+    "audienceUrl": "http://127.0.0.1:3057/Personnel%20Economics%20(Dur)/Lectures/Upcoming%20block%20companion/tournaments/index.html?mode=audience",
+    "audienceRevealTime": 2,
+    "synchronised": true
+  }
+}
