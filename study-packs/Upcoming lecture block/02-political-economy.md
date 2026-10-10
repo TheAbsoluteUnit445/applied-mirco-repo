@@ -2,7 +2,7 @@
 
 Topic IDs: **PUB-POL-VOTE, PUB-POL-GOVFAIL**, with prerequisite bridges **PUB-POSNORM, PUB-PG-SAM, PUB-SWF**. [Pack index](index.md). This module explains how individual preferences become public decisions, why a stable decision can still be inefficient, and how institutions affect the behaviour of officials and organised interests.
 
-The [course guide, PDF p.2](<../../00 Course info/Course guide 2026-27.pdf#page=2>) assigns **R&G chapter 6**, lecture **13 October 2026**. No Lecture 7 or week-7 Public tutorial sheet was found on 7 October. The chapter is therefore the primary preparation source, rather than a claim that the unreleased lecture covers every section. Read [chapter 6 text](<../../Textbooks/Rosen & Gayer (md)/06 - Political Economy.md>) beside the [original PDF, pp.191–224](<../../Textbooks/Rosen & Gayer - Public Finance (10th ed).pdf#page=191>). All page numbers here are PDF pages.
+The [course guide, PDF p.2](<../../00 Course info/Course guide 2026-27.pdf#page=2>) assigns **R&G chapter 6**, lecture **13 October 2026**. **Update, 10 October:** the supplied [Lecture 7](<../../Public Economics (Delfgaauw)/Week 7 - Political economy/Lectures/Lecture 7 BB.pdf>) and [Week 7 tutorial with answers](<../../Public Economics (Delfgaauw)/Week 7 - Political economy/Exercises/exercises week 7.pdf>) are now stored in the repository. The new [step-by-step Week 7 walkthrough](02-week7-walkthrough.md) covers their strategic voting, rank-order, candidate commitment, transport-investment and cleaning exercises, with full worked algebra and source corrections. This module remains the full assigned-chapter foundation. Read [chapter 6 text](<../../Textbooks/Rosen & Gayer (md)/06 - Political Economy.md>) beside the [original PDF, pp.191–224](<../../Textbooks/Rosen & Gayer - Public Finance (10th ed).pdf#page=191>). All page numbers here are PDF pages.
 
 ## 2.1 Start with the distinction between explanation and evaluation
 
@@ -155,7 +155,7 @@ The original values and preference tables are retained. Prompts are faithful con
 6. **R&G DQ6.9a–e, PDF pp.222–223.** [Original](<../../Textbooks/Rosen & Gayer - Public Finance (10th ed).pdf#page=222>). Milk demand is $Q=100-10P$; horizontal supply has price 2. Find (a) competitive price and quantity, (b) cartel price and quantity using $MR=10-Q/5$, (c) rents, (d) the maximum lump-sum campaign contribution and deadweight loss, (e) how resource-using lobbying changes the welfare loss.
 7. **Constructed transfer exercise.** Three voters' net benefits from project X are (90,-20,-35); from Y they are (-15,70,-65). Which projects pass separately? Would voters 1 and 2 trade support? Does their private gain show both projects should be built? Explain using totals.
 
-There is no current week-7 tutorial to select from. The book sequence fills the gap: DQ6.1 tests the non-single-peaked caveat, DQ6.10 tests agenda power, and DQ6.9 tests government failure with explicit welfare accounting.
+The [new Week 7 walkthrough](02-week7-walkthrough.md) supplies the current tutorial sequence: DQ6.1(b), DQ6.3, DQ6.10 (6.11 in older editions), and additional exercises 7.1–7.4. The book sequence below remains useful: DQ6.1 tests the non-single-peaked caveat, DQ6.10 tests agenda power, and DQ6.9 tests government failure with explicit welfare accounting.
 
 ## 2.12 Worked solutions
 

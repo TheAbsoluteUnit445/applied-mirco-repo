@@ -1,5 +1,9 @@
 # Running the October study pack
 
+**Week 7 update:** open [the new walkthrough](02-week7-walkthrough.html) for the original Lecture 7 and tutorial exercises explained step by step. Six HyperFrames graph players sit beside the reasoning; each has sliders, Reset, keyboard controls and a full-screen link. The walkthrough includes hidden worked solutions and links to the original book and past papers. The existing political-economy deck remains available as an earlier companion.
+
+To rebuild just the Week 7 graphs and notes, run `python 'study-packs/Upcoming lecture block/build/build-week7.py'`, then `node 'study-packs/Upcoming lecture block/build/render-notes.cjs'` from the repository root. Verify with `node 'study-packs/Upcoming lecture block/build/verify-week7.cjs'` and, with the local server running, `node 'study-packs/Upcoming lecture block/build/browser-week7.cjs'`. The graph wrappers are self-contained and can also be opened from disk; the complete walkthrough's source links work best through the local server below. [Source coverage and corrections](WEEK7-COVERAGE.md) records the alignment.
+
 Open [index.html](index.html) for the readable study document, or [lectures.html](lectures.html) for the five decks. The corresponding Markdown files are the editable sources. The main modules hold the complete explanations and attempt-first practice with worked solutions; slides are a companion.
 
 ## Direct opening from disk

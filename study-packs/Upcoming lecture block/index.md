@@ -2,6 +2,10 @@
 
 Prepared **7 October 2026**, for the recent and upcoming block in Applied Microeconomics FEB12001X. This pack covers optimal taxation, collective decision-making, discrimination, tournaments and teams. It includes the 6 October taxation and 7 October competition lectures as well as the later dates. The 16 October question hour is a revision opportunity, not a sixth theory module. The [course guide, PDF pp.2–3](<../../00 Course info/Course guide 2026-27.pdf#page=2>) assigns these chapters; its lecture dates are scheduled dates, not proof of which content was delivered in class.
 
+## Week 7 update — 10 October 2026
+
+The original [Lecture 7 BB](<../../Public Economics (Delfgaauw)/Week 7 - Political economy/Lectures/Lecture 7 BB.pdf>) and [Week 7 exercises with supplied answers](<../../Public Economics (Delfgaauw)/Week 7 - Political economy/Exercises/exercises week 7.pdf>) are now included. Open the **[new step-by-step Week 7 walkthrough](02-week7-walkthrough.md)** for the complete lecture example, every assigned tutorial question, and the F24/F25 exam applications. The 7 October coverage table and audit files below describe the earlier inventory; their Week 7 absence statements are superseded by this update.
+
 ## Start here
 
 The main deliverable is the five substantial theory-and-practice chapters. Each builds the mechanism before its equations, defines choices and assumptions, works through derivations, and then provides an **attempt-first practice section before complete solutions**. Original paper values are preserved in faithful condensed prompts with links to the complete originals. Book solutions and teaching variants are independently derived unless a supplied answer is explicitly identified. Examples invented for teaching are labelled.

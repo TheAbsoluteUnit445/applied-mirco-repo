@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "scripts": {
+    "check": "npx hyperframes@0.8.145 check ./composition"
+  }
+}
