@@ -1,5 +1,7 @@
 # Exam map - Applied Microeconomics FEB12001X
 
+**Source availability update, 14 October:** Public Weeks 6-7 and Personnel Topics 8-9 are now available; see [source update](SOURCE-UPDATE-2026-10-14.md). Older claims below that these tutorials have not been released are superseded. Generated readiness scores predate the current tutoring sessions.
+
 **Final exam: Fri 23 Oct 2026, 09:30-12:30.** Open questions, **exactly 50% Public / 50% Personnel** (true in all 6 past papers), covers everything, and your grade is the exam alone. There is no midterm this year.
 
 **Where we're headed:** be able to solve every past final/resit question cold. Every tutorial exercise and book section below is ranked by how directly it gets you there. **The book is the source of truth**: lectures and tutorials select from it, and the gaps get filled from it.

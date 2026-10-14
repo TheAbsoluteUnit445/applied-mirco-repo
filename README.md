@@ -26,11 +26,14 @@ Then open <http://127.0.0.1:3057/study-packs/Upcoming%20lecture%20block/index.ht
 - **[AGENTS.md](AGENTS.md)**: instructions for AI agents working in this repo
 
 ## Contents
+
+**14 October source update:** [Latest tutorial and lecture files](<map/SOURCE-UPDATE-2026-10-14.md>) links to Public Weeks 6-7 and Personnel Topics 8-9. Older gap tables and readiness rankings predate these additions; statements that these exercise sheets are unavailable are superseded by the source update.
+
 | Folder | What |
 |---|---|
 | `00 Course info/` | Course guide (syllabus) and tutorial schedule |
-| `Public Economics (Delfgaauw)/` | Weeks 1-6: lectures, exercise sheets with solutions, notes |
-| `Personnel Economics (Dur)/` | Lecture slides 1-3, exercise sets Topics 1-6 with answers |
+| `Public Economics (Delfgaauw)/` | Weeks 1-7: available lectures, exercise sheets with solutions, notes |
+| `Personnel Economics (Dur)/` | Lecture slides 1-3, exercise sets Topics 1-6 and 8-9 with answers |
 | `Past exams/` | Finals Oct 2024 and Oct 2025, resits Jul 2025 and Jul 2026, midterms 2023 and 2025 (with solutions) |
 | `Textbooks/` | Rosen & Gayer *Public Finance* (10th ed.) and Kuhn *Personnel Economics*, plus per-chapter Markdown |
 | `map/` | Exam map, topic list, one page per topic, gap tables, raw analysis in `map/_work/` |
